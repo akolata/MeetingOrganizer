@@ -27,7 +27,7 @@ public class LoginControllerTest {
     private MockMvc mvc;
 
     @Test
-    public void controllerShouldNotBeNull() {
+    public void loginController_shouldNotBeNull() {
         assertNotNull(loginController);
     }
 

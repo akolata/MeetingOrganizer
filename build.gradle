@@ -10,6 +10,10 @@ buildscript {
 	}
 }
 
+plugins {
+	id 'io.franzbecker.gradle-lombok' version '1.10'
+}
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
@@ -25,10 +29,15 @@ repositories {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
-	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+	compile('org.springframework.boot:spring-boot-starter-web')
 	compile ('org.webjars:bootstrap:3.3.7')
 	compile('org.webjars:jquery:3.2.1')
 
+	runtime('org.springframework.boot:spring-boot-devtools')
+
+	compileOnly('org.projectlombok:lombok')
+
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+
 }
