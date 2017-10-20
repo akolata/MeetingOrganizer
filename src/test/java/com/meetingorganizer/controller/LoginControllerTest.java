@@ -8,7 +8,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.Assert.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -40,6 +40,6 @@ public class LoginControllerTest {
 
     @Test
     public void displayLoginPage_GetRequest_ShouldReturnValidViewName() throws Exception {
-        this.mvc.perform(get(LOGIN_URL)).andExpect(status().isOk()).andExpect(view().name("login"));
+        this.mvc.perform(get(LOGIN_URL)).andExpect(status().isOk()).andExpect(view().name(LoginController.LOGIN_PAGE));
     }
 }

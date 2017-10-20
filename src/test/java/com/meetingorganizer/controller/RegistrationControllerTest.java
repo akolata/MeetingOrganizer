@@ -9,9 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Created by Aleksander on 18.10.2017.
@@ -37,7 +35,7 @@ public class RegistrationControllerTest {
     public void displayRegistrationPage_getRequest_ShouldReturnValidViewNameAndHasDtoInModel() throws Exception {
         mvc.perform(get(REGISTRATION_URL))
                 .andExpect(status().isOk())
-                .andExpect(view().name("register"))
+                .andExpect(view().name(RegistrationController.REGISTRATION_PAGE))
                 .andExpect(model().attributeExists("dto"));
     }
 }
