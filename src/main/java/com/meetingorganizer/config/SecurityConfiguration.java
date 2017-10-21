@@ -21,7 +21,8 @@ public class SecurityConfiguration
             "/js/**",
             "/images/**",
             "/",
-            "/register"
+            "/register",
+            "/register/confirm"
     };
 
     @Override

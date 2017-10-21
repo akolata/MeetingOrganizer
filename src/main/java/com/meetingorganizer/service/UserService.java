@@ -1,14 +1,21 @@
 package com.meetingorganizer.service;
 
 import com.meetingorganizer.domain.User;
+import com.meetingorganizer.domain.VerificationToken;
 import com.meetingorganizer.dto.RegistrationFormDto;
 
 /**
- * Created by Aleksander on 21.10.2017.
+ * @author Aleksander
  */
 public interface UserService {
 
     boolean isEmailAlreadyTaken(String email);
 
-    User saveUser(RegistrationFormDto dto);
+    User saveRegisteredUser(RegistrationFormDto dto);
+
+    User saveUser(User user);
+
+    void createVerificationToken(User user, String token);
+
+    VerificationToken getVerificationToken(String token);
 }
