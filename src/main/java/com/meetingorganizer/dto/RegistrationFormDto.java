@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
  * @author Aleksander
  * Registration DTO used while user registration
  * IMPORTANT : because of problems with error codes naming for class-level annotations,
- * those codes are read later and read from message bundle.
+ * those codes are read later from message bundle.
  * To make it work, {@link com.meetingorganizer.validation.FieldsValueMatch} message property should be name
  * same as property in message bundle
  */

@@ -1,5 +1,6 @@
 package com.meetingorganizer.domain;
 
+import com.meetingorganizer.dto.RegistrationFormDto;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -35,11 +36,6 @@ public class User
     @Setter
     private String lastName;
 
-    @Column(name = "LOGIN", nullable = false, unique = true)
-    @Getter
-    @Setter
-    private String login;
-
     @Column(name = "PASSWORD", nullable = false)
     @Setter
     private String password;
@@ -57,6 +53,18 @@ public class User
     @Column(name = "ENABLED")
     @Setter
     private boolean enabled;
+
+    @Column(name = "ACCOUNT_NOT_EXPIRED")
+    @Setter
+    private boolean accountNonExpired;
+
+    @Column(name = "CREDENTIALS_NOT_EXPIRED")
+    @Setter
+    private boolean credentialsNonExpired;
+
+    @Column(name = "ACCOUNT_NOT_LOCKED")
+    @Setter
+    private boolean accountNonLocked;
 
     @ManyToMany(fetch = FetchType.EAGER,
             cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -78,6 +86,16 @@ public class User
         enabled = true;
         authorities = new HashSet<>();
         meetings = new LinkedList<>();
+    }
+
+    public User(RegistrationFormDto dto) {
+        this.firstName = dto.getFirstName();
+        this.lastName = dto.getLastName();
+        this.email = dto.getEmail();
+        this.password = dto.getPassword();
+        this.enabled = true;
+        this.authorities = new HashSet<>();
+        this.meetings = new LinkedList<>();
     }
 
     @Override
@@ -107,22 +125,22 @@ public class User
 
     @Override
     public String getUsername() {
-        return login;
+        return email;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return accountNonExpired;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return accountNonLocked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return credentialsNonExpired;
     }
 
     @Override
@@ -136,12 +154,13 @@ public class User
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", enabled=" + enabled +
-                ", authorities=" + authorities +
+                ", accountNonExpired=" + accountNonExpired +
+                ", credentialsNonExpired=" + credentialsNonExpired +
+                ", accountNonLocked=" + accountNonLocked +
                 '}';
     }
 }
