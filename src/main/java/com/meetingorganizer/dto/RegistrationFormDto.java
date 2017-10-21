@@ -61,6 +61,18 @@ public class RegistrationFormDto {
     @ValidPassword
     private String confirmPassword;
 
+    public RegistrationFormDto() {
+    }
+
+    public RegistrationFormDto(String firstName, String lastName, String email, String confirmEmail, String password, String confirmPassword) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.confirmEmail = confirmEmail;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+    }
+
     @Override
     public String toString() {
         return "RegistrationFormDto{" +

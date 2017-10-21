@@ -37,6 +37,7 @@ dependencies {
 	compile ('org.webjars:bootstrap:3.3.7')
 	compile('org.webjars:jquery:3.2.1')
 
+	runtime('com.h2database:h2')
 	runtime('mysql:mysql-connector-java')
 	runtime('org.springframework.boot:spring-boot-devtools')
 

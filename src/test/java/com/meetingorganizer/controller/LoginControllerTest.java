@@ -1,9 +1,11 @@
 package com.meetingorganizer.controller;
 
+import com.meetingorganizer.config.SecurityConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -12,10 +14,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Created by Aleksander on 17.10.2017.
+ * Login controller tests
+ * @author Aleksander
  */
 @RunWith(SpringRunner.class)
 @WebMvcTest(controllers = LoginController.class)
+@Import(SecurityConfiguration.class)
 public class LoginControllerTest {
 
     private static final String LOGIN_URL = "/login";
@@ -40,6 +44,8 @@ public class LoginControllerTest {
 
     @Test
     public void displayLoginPage_GetRequest_ShouldReturnValidViewName() throws Exception {
-        this.mvc.perform(get(LOGIN_URL)).andExpect(status().isOk()).andExpect(view().name(LoginController.LOGIN_PAGE));
+        this.mvc.perform(get(LOGIN_URL))
+                .andExpect(status().isOk())
+                .andExpect(view().name(LoginController.LOGIN_PAGE));
     }
 }

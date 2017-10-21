@@ -59,8 +59,6 @@ public @interface FieldsValueMatch {
             Object fieldMatchValue = new BeanWrapperImpl(value)
                     .getPropertyValue(fieldMatch);
 
-            System.out.println("fieldValue  = " + fieldValue);
-            System.out.println("fieldMatchValue  = " + fieldMatchValue);
 
             if (fieldValue != null) {
                 return fieldValue.equals(fieldMatchValue);
