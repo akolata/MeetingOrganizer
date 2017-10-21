@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Reservation for meeting
@@ -25,7 +25,7 @@ public class Reservation {
     @Column(name = "DATE")
     @Getter
     @Setter
-    private LocalDate reservationDate;
+    private LocalDateTime reservationDate;
 
     @Column(name = "DESCFIPTION")
     @Getter
@@ -59,7 +59,7 @@ public class Reservation {
                 "id=" + id +
                 ", reservationDate=" + reservationDate +
                 ", description='" + description + '\'' +
-                ", reserver=" + reserver.getId() +
+                ", reserver.id=" + reserver.getId() +
                 '}';
     }
 }

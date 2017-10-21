@@ -9,13 +9,15 @@ import com.meetingorganizer.repository.VerificationTokenRepository;
 import com.meetingorganizer.service.AuthorityService;
 import com.meetingorganizer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
- * Server for managing user's entities
+ * Service for managing user's entities
  */
 @Service
 public class UsersManagementService implements UserService {
@@ -23,12 +25,17 @@ public class UsersManagementService implements UserService {
     private UserRepository userRepository;
     private AuthorityService authorityService;
     private VerificationTokenRepository tokenRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UsersManagementService(UserRepository userRepository, AuthorityService authorityService, VerificationTokenRepository tokenRepository) {
+    public UsersManagementService(UserRepository userRepository,
+                                  AuthorityService authorityService,
+                                  VerificationTokenRepository tokenRepository,
+                                  PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.authorityService = authorityService;
         this.tokenRepository = tokenRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -38,13 +45,13 @@ public class UsersManagementService implements UserService {
     }
 
     @Override
-    public User saveRegisteredUser(RegistrationFormDto dto) {
+    public User registerUser(RegistrationFormDto dto) {
         User user = new User(dto);
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authorityService.findAuthorityByName("USER"));
 
         user.setAuthorities(authorities);
-        user.setEnabled(false);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         return userRepository.saveAndFlush(user);
     }
@@ -63,5 +70,17 @@ public class UsersManagementService implements UserService {
     @Override
     public User saveUser(User user) {
         return userRepository.saveAndFlush(user);
+    }
+
+    @Override
+    public VerificationToken generateNewVerificationToken(String email) {
+        User user = userRepository.findByEmail(email);
+        VerificationToken actualToken = tokenRepository.findByUser(user);
+
+        actualToken.setToken(UUID.randomUUID().toString());
+        actualToken.updateExpirationTime();
+
+        actualToken = tokenRepository.saveAndFlush(actualToken);
+        return actualToken;
     }
 }

@@ -5,10 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 /**
- * Created by Aleksander on 21.10.2017.
+ * @author Aleksander
  */
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Long countAllByEmail(String email);
+
+    User findByEmail(String email);
 
 }

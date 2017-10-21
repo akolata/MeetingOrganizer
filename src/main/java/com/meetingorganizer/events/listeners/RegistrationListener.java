@@ -3,17 +3,14 @@ package com.meetingorganizer.events.listeners;
 import com.meetingorganizer.controller.RegistrationController;
 import com.meetingorganizer.domain.User;
 import com.meetingorganizer.events.RegistrationCompleteEvent;
+import com.meetingorganizer.service.MailService;
 import com.meetingorganizer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.MessageSource;
-import org.springframework.context.MessageSourceAware;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
-import java.util.Locale;
 import java.util.UUID;
 /**
  * Listener for user's successful registration event.
@@ -21,27 +18,25 @@ import java.util.UUID;
  */
 @Component
 public class RegistrationListener
-implements ApplicationListener<RegistrationCompleteEvent>, MessageSourceAware{
-
-    @Value("${spring.mail.username}")
-    private String from;
+implements ApplicationListener<RegistrationCompleteEvent>{
 
     private UserService userService;
 
     private JavaMailSender mailSender;
 
-    private MessageSource messageSource;
+    private MailService mailService;
 
     @Autowired
-    public RegistrationListener(UserService userService, JavaMailSender mailSender) {
+    public RegistrationListener(UserService userService, JavaMailSender mailSender, MailService mailService) {
         this.userService = userService;
         this.mailSender = mailSender;
+        this.mailService = mailService;
     }
 
     @Override
     public void onApplicationEvent(RegistrationCompleteEvent event) {
         User user = (User) event.getSource();
-        String url = event.getApplicationUrl();
+        String url = event.getTokenConfirmationUrl();
         String token = UUID.randomUUID().toString();
 
         url += RegistrationController.REGISTRATION_CONFIRM_ENDPOINT;
@@ -49,25 +44,9 @@ implements ApplicationListener<RegistrationCompleteEvent>, MessageSourceAware{
 
         userService.createVerificationToken(user, token);
 
-        SimpleMailMessage mailMessage = prepareMailMessage(url, user.getEmail(), event.getLocale());
+        SimpleMailMessage mailMessage = mailService.prepareRegistrationMailMessage(url,
+                user.getEmail(), event.getLocale());
         mailSender.send(mailMessage);
     }
 
-    private SimpleMailMessage prepareMailMessage(String applicationUrl, String to, Locale locale){
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        String mailText = messageSource.getMessage("registrationPage.emailMessage", new Object[]{applicationUrl}, locale);
-        String mailSubject = messageSource.getMessage("registrationPage.emailSubject", null, locale);
-
-        mailMessage.setTo(to);
-        mailMessage.setSubject(mailSubject);
-        mailMessage.setText(mailText);
-        mailMessage.setFrom(from);
-
-        return mailMessage;
-    }
-
-    @Override
-    public void setMessageSource(MessageSource messageSource) {
-        this.messageSource = messageSource;
-    }
 }

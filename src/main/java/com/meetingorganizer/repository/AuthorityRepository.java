@@ -4,7 +4,7 @@ import com.meetingorganizer.domain.Authority;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * Created by Aleksander on 21.10.2017.
+ * @author Aleksander
  */
 public interface AuthorityRepository extends JpaRepository<Authority, Long> {
 

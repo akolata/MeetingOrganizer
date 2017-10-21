@@ -11,11 +11,13 @@ public interface UserService {
 
     boolean isEmailAlreadyTaken(String email);
 
-    User saveRegisteredUser(RegistrationFormDto dto);
+    User registerUser(RegistrationFormDto dto);
 
     User saveUser(User user);
 
     void createVerificationToken(User user, String token);
 
     VerificationToken getVerificationToken(String token);
+
+    VerificationToken generateNewVerificationToken(String email);
 }

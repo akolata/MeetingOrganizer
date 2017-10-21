@@ -3,7 +3,7 @@ package com.meetingorganizer.service;
 import com.meetingorganizer.domain.Authority;
 
 /**
- * Created by Aleksander on 21.10.2017.
+ * @author Aleksander
  */
 public interface AuthorityService {
 

@@ -3,6 +3,7 @@ package com.meetingorganizer.domain;
 import com.meetingorganizer.dto.RegistrationFormDto;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -52,18 +53,22 @@ public class User
 
     @Column(name = "ENABLED")
     @Setter
+    @Type(type = "numeric_boolean")
     private boolean enabled;
 
     @Column(name = "ACCOUNT_NOT_EXPIRED")
     @Setter
+    @Type(type = "numeric_boolean")
     private boolean accountNonExpired;
 
     @Column(name = "CREDENTIALS_NOT_EXPIRED")
     @Setter
+    @Type(type = "numeric_boolean")
     private boolean credentialsNonExpired;
 
     @Column(name = "ACCOUNT_NOT_LOCKED")
     @Setter
+    @Type(type = "numeric_boolean")
     private boolean accountNonLocked;
 
     @ManyToMany(fetch = FetchType.EAGER,
@@ -83,19 +88,25 @@ public class User
     private List<Meeting> meetings;
 
     public User() {
-        enabled = true;
         authorities = new HashSet<>();
         meetings = new LinkedList<>();
+        enabled = false;
+        accountNonExpired = true;
+        accountNonLocked = true;
+        credentialsNonExpired = true;
     }
 
     public User(RegistrationFormDto dto) {
+        this.authorities = new HashSet<>();
+        this.meetings = new LinkedList<>();
         this.firstName = dto.getFirstName();
         this.lastName = dto.getLastName();
         this.email = dto.getEmail();
         this.password = dto.getPassword();
-        this.enabled = true;
-        this.authorities = new HashSet<>();
-        this.meetings = new LinkedList<>();
+        enabled = false;
+        accountNonExpired = true;
+        accountNonLocked = true;
+        credentialsNonExpired = true;
     }
 
     @Override

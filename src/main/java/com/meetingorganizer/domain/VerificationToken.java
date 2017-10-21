@@ -40,9 +40,9 @@ public class VerificationToken {
         this.expirationTime = calculateExpirationDate(EXPIRATION_TIME_IN_HOURS);
     }
 
-    private LocalDateTime calculateExpirationDate(int expirationTimeInMinutes){
+    private LocalDateTime calculateExpirationDate(int expirationTimeInHours){
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime expirationTime =  now.plusHours(expirationTimeInMinutes);
+        LocalDateTime expirationTime =  now.plusHours(expirationTimeInHours);
         return expirationTime;
     }
 
@@ -50,4 +50,17 @@ public class VerificationToken {
         return LocalDateTime.now().isAfter(this.expirationTime);
     }
 
+    public void updateExpirationTime(){
+        this.expirationTime = calculateExpirationDate(EXPIRATION_TIME_IN_HOURS);
+    }
+
+    @Override
+    public String toString() {
+        return "VerificationToken{" +
+                "id=" + id +
+                ", token='" + token + '\'' +
+                ", user.id=" + user.getId() +
+                ", expirationTime=" + expirationTime +
+                '}';
+    }
 }

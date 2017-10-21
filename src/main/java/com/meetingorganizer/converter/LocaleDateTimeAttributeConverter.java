@@ -6,10 +6,12 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
- * Created by Aleksander on 21.10.2017.
+ * Converter for LocalDateTime columns
+ * @author Aleksander
  */
 @Converter(autoApply = true)
-public class LocaleDateTimeAttributeConverter implements AttributeConverter<LocalDateTime, Timestamp> {
+public class LocaleDateTimeAttributeConverter
+        implements AttributeConverter<LocalDateTime, Timestamp> {
 
     @Override
     public Timestamp convertToDatabaseColumn(LocalDateTime attribute) {

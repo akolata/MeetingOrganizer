@@ -63,4 +63,13 @@ public class Meeting {
     public int hashCode() {
         return id.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "Meeting{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", location.id=" + location.getId() +
+                '}';
+    }
 }

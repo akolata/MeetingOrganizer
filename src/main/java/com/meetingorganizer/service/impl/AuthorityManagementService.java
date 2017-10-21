@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Created by Aleksander on 21.10.2017.
+ * @author Aleksander
  */
 @Service
 public class AuthorityManagementService implements AuthorityService {

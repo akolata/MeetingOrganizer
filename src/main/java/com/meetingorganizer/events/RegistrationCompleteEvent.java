@@ -16,20 +16,20 @@ public class RegistrationCompleteEvent
 extends ApplicationEvent{
 
     private User user;
-    private String applicationUrl;
+    private String tokenConfirmationUrl;
     private Locale locale;
 
     /**
      * Create new event and pass parameters needed for email message
      * @param source registered user's object
-     * @param applicationUrl url of currently working application
+     * @param tokenConfirmationUrl url of currently working application
      * @param locale needed for messages properties
      */
-    public RegistrationCompleteEvent(Object source, String applicationUrl, Locale locale) {
+    public RegistrationCompleteEvent(Object source, String tokenConfirmationUrl, Locale locale) {
         super(source);
 
         this.user = (User) source;
-        this.applicationUrl = applicationUrl;
+        this.tokenConfirmationUrl = tokenConfirmationUrl;
         this.locale = locale;
     }
 }
