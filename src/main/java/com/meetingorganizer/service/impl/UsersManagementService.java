@@ -48,7 +48,7 @@ public class UsersManagementService implements UserService {
     public User registerUser(RegistrationFormDto dto) {
         User user = new User(dto);
         Set<Authority> authorities = new HashSet<>();
-        authorities.add(authorityService.findAuthorityByName("USER"));
+        authorities.add(authorityService.findAuthorityByNameCreateAuthorityIfNotFound("USER"));
 
         user.setAuthorities(authorities);
         user.setPassword(passwordEncoder.encode(user.getPassword()));

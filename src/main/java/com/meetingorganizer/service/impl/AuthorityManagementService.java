@@ -12,17 +12,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthorityManagementService implements AuthorityService {
 
+    @Autowired
     private AuthorityRepository authorityRepository;
 
-    @Autowired
-    public AuthorityManagementService(AuthorityRepository authorityRepository) {
-        this.authorityRepository = authorityRepository;
-    }
-
     @Override
-    public Authority findAuthorityByName(String authorityName) {
+    public Authority findAuthorityByNameCreateAuthorityIfNotFound(String authorityName) {
         Authority authority = authorityRepository.findByAuthority(authorityName);
-        authority = authority == null ? saveAuthority(authorityName) : authority;
+        authority = (authority == null) ? saveAuthority(authorityName) : authority;
 
         return authority;
     }

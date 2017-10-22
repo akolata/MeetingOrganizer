@@ -1,6 +1,6 @@
 package com.meetingorganizer.config;
 
-import com.meetingorganizer.service.impl.UsersDetailsService;
+import com.meetingorganizer.service.impl.MeetingOrganizerUsersDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -37,10 +37,10 @@ public class SecurityConfiguration
 
     private static final String SALT = "salt by Meeting Organizer :)";
 
-    private UsersDetailsService userService;
+    private MeetingOrganizerUsersDetailsService userService;
 
     @Autowired
-    public SecurityConfiguration(UsersDetailsService userService) {
+    public SecurityConfiguration(MeetingOrganizerUsersDetailsService userService) {
         this.userService = userService;
     }
 

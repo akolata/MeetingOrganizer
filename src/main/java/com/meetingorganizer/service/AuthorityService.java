@@ -7,7 +7,7 @@ import com.meetingorganizer.domain.Authority;
  */
 public interface AuthorityService {
 
-    Authority findAuthorityByName(String authorityName);
+    Authority findAuthorityByNameCreateAuthorityIfNotFound(String authorityName);
 
     Authority saveAuthority(String authorityName);
 }
