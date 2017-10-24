@@ -67,8 +67,8 @@ public class RegistrationController {
      */
     @PostMapping
     public String processRegistrationForm(@Valid @ModelAttribute(name = "dto") RegistrationFormDto dto,
-                                          Model model,
                                           BindingResult bindingResult,
+                                          Model model,
                                           RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
@@ -148,8 +148,8 @@ public class RegistrationController {
      */
     @PostMapping("/resendToken")
     public String processResentTokenForm(@ModelAttribute(name = "dto") @Valid ResendTokenDto dto,
-                                         Model model,
                                          BindingResult bindingResult,
+                                         Model model,
                                          RedirectAttributes redirectAttributes) throws UnknownHostException {
 
         if(bindingResult.hasErrors()){

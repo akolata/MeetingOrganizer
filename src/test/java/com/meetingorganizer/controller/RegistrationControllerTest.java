@@ -1,19 +1,21 @@
 package com.meetingorganizer.controller;
 
+import com.meetingorganizer.DemoApplication;
+import com.meetingorganizer.config.MeetingOrganizerConfiguration;
 import com.meetingorganizer.config.SecurityConfiguration;
-import com.meetingorganizer.service.UserService;
-import com.meetingorganizer.utils.ValidationErrorMessagesUtils;
+import com.meetingorganizer.utils.TestUtils;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import utils.TestUtils;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import javax.servlet.Filter;
 
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -26,26 +28,29 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author Aleksander
  */
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = RegistrationController.class)
-@Import(SecurityConfiguration.class)
+@SpringBootTest(classes = {DemoApplication.class, SecurityConfiguration.class, MeetingOrganizerConfiguration.class})
 public class RegistrationControllerTest {
 
     private static final String REGISTRATION_URL = "/register";
 
-    @Autowired
     private MockMvc mvc;
 
-    @MockBean
-    private ValidationErrorMessagesUtils errorMessagesUtils;
+    @Autowired
+    private WebApplicationContext wac;
 
-    @MockBean
-    private ApplicationEventPublisher eventPublisher;
-
-    @MockBean
-    private UserService userService;
+    @Autowired
+    private Filter springSecurityFilterChain;
 
     @Autowired
     private RegistrationController registrationController;
+
+    @Before
+    public void setup(){
+        mvc = MockMvcBuilders
+                .webAppContextSetup(wac)
+                .addFilter(springSecurityFilterChain)
+                .build();
+    }
 
     @Test
     public void registrationController_shouldNotBeNull(){
@@ -63,7 +68,7 @@ public class RegistrationControllerTest {
     @Test
     public void processRegistrationForm_postRequest_statusShouldBeOk() throws Exception {
         mvc.perform(
-                post(REGISTRATION_URL).accept(MediaType.TEXT_HTML).with(csrf())
+                post(REGISTRATION_URL).with(csrf()).accept(MediaType.TEXT_HTML)
         ).andExpect(status().isOk());
     }
 
@@ -72,6 +77,7 @@ public class RegistrationControllerTest {
         String[] dtoFields = {"firstName", "lastName", "email", "confirmEmail", "password", "confirmPassword"};
 
         mvc.perform(post(REGISTRATION_URL)
+                .with(csrf())
                 .accept(MediaType.TEXT_HTML)
                 .param("firstName", "")
                 .param("lastName", "")
@@ -79,7 +85,6 @@ public class RegistrationControllerTest {
                 .param("confirmEmail", "")
                 .param("password", "")
                 .param("confirmPassword", "")
-                .with(csrf())
         )
                 .andExpect(status().isOk())
                 .andExpect(view().name(RegistrationController.REGISTRATION_PAGE))
@@ -148,9 +153,10 @@ public class RegistrationControllerTest {
                 .andExpect(model().errorCount(2));
     }
 
-    //@Test
+    @Test
     public void processRegistrationForm_validForm_shouldNotHasErrors() throws Exception {
         mvc.perform(post(REGISTRATION_URL)
+                .with(csrf())
                 .accept(MediaType.TEXT_HTML)
                 .param("firstName", TestUtils.createStringWithLength(10))
                 .param("lastName", TestUtils.createStringWithLength(10))
@@ -158,7 +164,6 @@ public class RegistrationControllerTest {
                 .param("confirmEmail", "valid@mail.com")
                 .param("password", "goodPa$$1")
                 .param("confirmPassword", "goodPa$$1")
-                .with(csrf())
         )
                 .andExpect(status().isOk())
                 .andExpect(view().name(RegistrationController.REGISTRATION_PAGE))
