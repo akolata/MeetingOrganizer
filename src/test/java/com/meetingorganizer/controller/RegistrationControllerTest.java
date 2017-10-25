@@ -3,21 +3,31 @@ package com.meetingorganizer.controller;
 import com.meetingorganizer.DemoApplication;
 import com.meetingorganizer.config.MeetingOrganizerConfiguration;
 import com.meetingorganizer.config.SecurityConfiguration;
+import com.meetingorganizer.domain.User;
+import com.meetingorganizer.domain.VerificationToken;
+import com.meetingorganizer.service.MailService;
+import com.meetingorganizer.service.UserService;
 import com.meetingorganizer.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.Filter;
+import java.util.Locale;
 
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -32,6 +42,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RegistrationControllerTest {
 
     private static final String REGISTRATION_URL = "/register";
+    private static final String CONFIRM_TOKEN_URL = "/register/confirm";
+    private static final String RESEND_TOKEN_URL = "/register/resendToken";
 
     private MockMvc mvc;
 
@@ -43,6 +55,12 @@ public class RegistrationControllerTest {
 
     @Autowired
     private RegistrationController registrationController;
+
+    @MockBean
+    private UserService usersService;
+
+    @MockBean
+    private MailService mailService;
 
     @Before
     public void setup(){
@@ -169,5 +187,171 @@ public class RegistrationControllerTest {
                 .andExpect(view().name(RegistrationController.REGISTRATION_PAGE))
                 .andExpect(model().hasNoErrors())
                 .andExpect(model().errorCount(0));
+    }
+
+    @Test
+    public void processRegistrationForm_validFormButMailIsTaken_shouldHasErrorAttribute() throws Exception {
+        when(usersService.isEmailAlreadyTaken(any(String.class))).thenReturn(true);
+
+        mvc.perform(post(REGISTRATION_URL)
+                .with(csrf())
+                .accept(MediaType.TEXT_HTML)
+                .param("firstName", TestUtils.createStringWithLength(10))
+                .param("lastName", TestUtils.createStringWithLength(10))
+                .param("email", "valid@mail.com")
+                .param("confirmEmail", "valid@mail.com")
+                .param("password", "goodPa$$1")
+                .param("confirmPassword", "goodPa$$1")
+        )
+                .andExpect(status().isOk())
+                .andExpect(view().name(RegistrationController.REGISTRATION_PAGE))
+                .andExpect(model().hasNoErrors())
+                .andExpect(model().attributeExists("emailAlreadyTaken"));
+
+        verify(usersService, times(1)).isEmailAlreadyTaken("valid@mail.com");
+    }
+
+    @Test
+    public void confirmRegistration_tokenNotFound_modelShouldHasFlashAttribute() throws Exception {
+        String token = "token";
+
+        when(usersService.getVerificationToken(token)).thenReturn(null);
+
+        mvc.perform(get(CONFIRM_TOKEN_URL)
+                .accept(MediaType.TEXT_HTML)
+                .param("token", token)
+        )
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"))
+                .andExpect(flash().attributeExists("tokenNotFound"));
+    }
+
+    @Test
+    public void confirmRegistration_tokenExpired_modelShouldHasFlashAttribute() throws Exception {
+        String token = "token";
+        VerificationToken verificationToken = Mockito.mock(VerificationToken.class);
+
+        when(usersService.getVerificationToken(token)).thenReturn(verificationToken);
+        when(verificationToken.isTokenExpired()).thenReturn(true);
+
+        mvc.perform(get(CONFIRM_TOKEN_URL)
+                .accept(MediaType.TEXT_HTML)
+                .param("token", token)
+        )
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"))
+                .andExpect(flash().attributeExists("tokenExpired"));
+    }
+
+    @Test
+    public void confirmRegistration_tokenValid_modelShouldHasFlashAttribute() throws Exception {
+        String token = "token";
+        VerificationToken verificationToken = Mockito.mock(VerificationToken.class);
+        User userFromToken = Mockito.mock(User.class);
+
+        when(usersService.getVerificationToken(token)).thenReturn(verificationToken);
+        when(verificationToken.isTokenExpired()).thenReturn(false);
+        when(verificationToken.getUser()).thenReturn(userFromToken);
+
+        mvc.perform(get(CONFIRM_TOKEN_URL)
+                .accept(MediaType.TEXT_HTML)
+                .param("token", token)
+        )
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"))
+                .andExpect(flash().attributeExists("userEnabled"));
+
+        verify(userFromToken, times(1)).setEnabled(true);
+    }
+
+    @Test
+    public void displayResentTokenPage_modelShouldHasDtoAndStatusShouldBeOk() throws Exception {
+        mvc.perform(get(RESEND_TOKEN_URL)
+                .accept(MediaType.TEXT_HTML)
+        )
+                .andExpect(status().isOk())
+                .andExpect(view().name("resendToken"))
+                .andExpect(model().attributeExists("dto"));
+    }
+
+    @Test
+    public void processResentTokenForm_formHasErrors_shouldReturnToForm() throws Exception {
+        String invalidMail = "invalid.mail";
+
+        mvc.perform(post(RESEND_TOKEN_URL)
+                .with(csrf())
+                .accept(MediaType.TEXT_HTML)
+                .param("email", invalidMail)
+        )
+                .andExpect(status().isOk())
+                .andExpect(view().name(RegistrationController.RESEND_TOKEN_PAGE))
+                .andExpect(model().hasErrors())
+                .andExpect(model().errorCount(1));
+    }
+
+    @Test
+    public void processResentTokenForm_mailNotRegistered_shouldReturnToForm() throws Exception {
+        String mail = "valid@mail.com";
+
+        when(usersService.isEmailAlreadyTaken(mail)).thenReturn(false);
+
+        mvc.perform(post(RESEND_TOKEN_URL)
+                .with(csrf())
+                .accept(MediaType.TEXT_HTML)
+                .param("email", mail)
+        )
+                .andExpect(status().isOk())
+                .andExpect(view().name(RegistrationController.RESEND_TOKEN_PAGE))
+                .andExpect(model().attributeExists("emailNotRegistered"));
+    }
+
+    @Test
+    public void processResentTokenForm_sendMailException_shouldReturnToForm() throws Exception {
+        String mail = "valid@mail.com";
+        VerificationToken verificationToken = Mockito.mock(VerificationToken.class);
+        User user = Mockito.mock(User.class);
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+        when(usersService.isEmailAlreadyTaken(mail)).thenReturn(true);
+        when(usersService.generateNewVerificationToken(mail)).thenReturn(verificationToken);
+        when(verificationToken.getUser()).thenReturn(user);
+        when(user.getEmail()).thenReturn(mail);
+        when(mailService.prepareRegistrationMailMessage(any(String.class), any(String.class), any(Locale.class)))
+                .thenReturn(mailMessage);
+        doThrow(new RuntimeException()).when(mailService).sendEmail(mailMessage);
+
+        mvc.perform(post(RESEND_TOKEN_URL)
+                .with(csrf())
+                .accept(MediaType.TEXT_HTML)
+                .param("email", mail)
+        )
+                .andExpect(status().isOk())
+                .andExpect(view().name(RegistrationController.RESEND_TOKEN_PAGE))
+                .andExpect(model().attributeExists("emailSendException"));
+    }
+
+    @Test
+    public void processResentTokenForm_formIsOk_ShouldRedirectToLoginAndShowMessage() throws Exception {
+        String mail = "valid@mail.com";
+        VerificationToken verificationToken = Mockito.mock(VerificationToken.class);
+        User user = Mockito.mock(User.class);
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+        when(usersService.isEmailAlreadyTaken(mail)).thenReturn(true);
+        when(usersService.generateNewVerificationToken(mail)).thenReturn(verificationToken);
+        when(verificationToken.getUser()).thenReturn(user);
+        when(user.getEmail()).thenReturn(mail);
+        when(mailService.prepareRegistrationMailMessage(any(String.class), any(String.class), any(Locale.class)))
+                .thenReturn(mailMessage);
+        doNothing().when(mailService).sendEmail(mailMessage);
+
+        mvc.perform(post(RESEND_TOKEN_URL)
+                .with(csrf())
+                .accept(MediaType.TEXT_HTML)
+                .param("email", mail)
+        )
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"))
+                .andExpect(flash().attributeExists("tokenResend"));
     }
 }
