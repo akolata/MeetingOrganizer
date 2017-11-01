@@ -56,7 +56,7 @@ public class HomeControllerTest {
     }
 
     @Test
-    public void showHomePage_returnsValidViewName() throws Exception {
+    public void displayHomePage_returnsValidViewName() throws Exception {
         mvc.perform(get(HOME_URL)
                 .with(user("user")))
                 .andExpect(status().isOk())

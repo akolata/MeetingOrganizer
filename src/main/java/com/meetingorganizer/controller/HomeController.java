@@ -15,7 +15,7 @@ public class HomeController {
     public static final String HOME_PAGE = "homePage";
 
     @GetMapping
-    public String showHomePage() {
+    public String displayHomePage() {
         return HOME_PAGE;
     }
 }
