@@ -13,7 +13,9 @@ public interface UserService {
 
     User registerUser(RegistrationFormDto dto);
 
-    User saveUser(User user);
+    User saveUserAndFlush(User user);
+
+    User findOne(Long id);
 
     void createVerificationToken(User user, String token);
 

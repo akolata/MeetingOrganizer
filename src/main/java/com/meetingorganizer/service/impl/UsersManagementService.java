@@ -63,12 +63,17 @@ public class UsersManagementService implements UserService {
     }
 
     @Override
+    public User findOne(Long id) {
+        return userRepository.findOne(id);
+    }
+
+    @Override
     public VerificationToken getVerificationToken(String token) {
         return tokenRepository.findByToken(token);
     }
 
     @Override
-    public User saveUser(User user) {
+    public User saveUserAndFlush(User user) {
         return userRepository.saveAndFlush(user);
     }
 
