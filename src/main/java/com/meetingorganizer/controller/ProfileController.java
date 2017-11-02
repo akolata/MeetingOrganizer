@@ -23,7 +23,8 @@ import java.io.IOException;
 @RequestMapping("/profile")
 public class ProfileController {
 
-    public static final String PROFILE_PAGE = "profile";
+    public static final String PROFILE_PAGE = "profilePage";
+    public static final String EDIT_PROFILE_PAGE = "profile/editProfilePage";
     public static final String REDIRECT_TO_PROFILE = "redirect:/profile";
 
     private UserService userService;
@@ -59,6 +60,16 @@ public class ProfileController {
         userService.saveUserAndFlush(currentUSer);
 
         return PROFILE_PAGE;
+    }
+
+    @GetMapping(path = "/edit")
+    public String displayEditProfilePage() {
+        return EDIT_PROFILE_PAGE;
+    }
+
+    @PostMapping(path = "/edit")
+    public String processEditProfileForm() {
+        return EDIT_PROFILE_PAGE;
     }
 
 }

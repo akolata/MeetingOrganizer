@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html ;charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title th:text="#{editProfilePage.title}">Edit Profile</title>
+    <link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css"
+          rel="stylesheet"
+          type="text/css"/>
+    <link th:href="@{/css/style.css}"
+          href="../static/css/style.css"
+          rel="stylesheet"
+          type="text/css" />
+</head>
+<body>
+    <div th:replace="fragments/common :: navbar">
+        <p>Navbar</p>
+    </div>
+    <div class="container">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label for="first-name" class="col-xs-12 col-sm-2" th:text="#{label.firstName}">First Name</label>
+                <div class="col-xs-12 col-sm-8">
+                    <input id="first-name" class="form-control" type="text" th:placeholder="#{label.firstName}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="last-name" class="col-xs-12 col-sm-2" th:text="#{label.lastName}">Last Name</label>
+                <div class="col-xs-12 col-sm-8">
+                    <input id="last-name" class="form-control" type="text" th:placeholder="#{label.lastName}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="phone" class="col-xs-12 col-sm-2" th:text="#{label.phone}">Phone</label>
+                <div class="col-xs-12 col-sm-8">
+                    <input id="phone" class="form-control" type="text" th:placeholder="#{label.phone}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="mail" class="col-xs-12 col-sm-2" th:text="#{label.email}">Mail</label>
+                <div class="col-xs-12 col-sm-8">
+                    <input id="mail" class="form-control" type="email" th:placeholder="#{label.email}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="confirm-mail" class="col-xs-12 col-sm-2" th:text="#{label.confirmEmail}">Confirm Mail</label>
+                <div class="col-xs-12 col-sm-8">
+                    <input id="confirm-mail" class="form-control" type="email" th:placeholder="#{label.confirmEmail}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="old-password" class="col-xs-12 col-sm-2" th:text="#{label.oldPassword}">Old password</label>
+                <div class="col-xs-12 col-sm-8">
+                    <input id="old-password" class="form-control" type="password" th:placeholder="#{label.oldPassword}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password" class="col-xs-12 col-sm-2" th:text="#{label.password}">Password</label>
+                <div class="col-xs-12 col-sm-8">
+                    <input id="password" class="form-control" type="password" th:placeholder="#{label.password}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password" class="col-xs-12 col-sm-2" th:text="#{label.confirmPassword}">Confirm password</label>
+                <div class="col-xs-12 col-sm-8">
+                    <input id="confirm-password" class="form-control" type="password" th:placeholder="#{label.confirmPassword}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-12 col-sm-3 col-sm-offset-4">
+                    <button class="btn btn-default btn-block" th:text="#{button.saveChanges}">Save changes</button>
+                </div>
+            </div>
+        </form>
+        <div class="text-center">
+            <a th:href="@{/profile}" th:text="#{href.backToProfilePage}">Back to profile</a>
+        </div>
+    </div>
+    <div th:replace="fragments/common :: footer">
+        <p>Footer</p>
+    </div>
+    <div th:replace="fragments/common :: scripts">
+        <p>Scripts</p>
+    </div>
+</body>
+</html>
