@@ -23,7 +23,7 @@ import java.io.IOException;
 @RequestMapping("/profile")
 public class ProfileController {
 
-    public static final String PROFILE_PAGE = "profilePage";
+    public static final String PROFILE_PAGE = "profile/profilePage";
     public static final String EDIT_PROFILE_PAGE = "profile/editProfilePage";
     public static final String REDIRECT_TO_PROFILE = "redirect:/profile";
 
