@@ -3,6 +3,7 @@ package com.meetingorganizer.service.impl;
 import com.meetingorganizer.domain.Authority;
 import com.meetingorganizer.domain.User;
 import com.meetingorganizer.domain.VerificationToken;
+import com.meetingorganizer.dto.EditProfileDto;
 import com.meetingorganizer.dto.RegistrationFormDto;
 import com.meetingorganizer.repository.UserRepository;
 import com.meetingorganizer.repository.VerificationTokenRepository;
@@ -87,5 +88,21 @@ public class UsersManagementService implements UserService {
 
         actualToken = tokenRepository.saveAndFlush(actualToken);
         return actualToken;
+    }
+
+    @Override
+    public boolean isPasswordDifferentThanCurrent(String password, User user) {
+        if(passwordEncoder.encode(password).equals(user.getPassword())){
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public void updateUserProfile(User user, EditProfileDto dto) {
+        user.updateUserFromDto(dto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        saveUserAndFlush(user);
     }
 }

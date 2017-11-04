@@ -2,6 +2,10 @@ body {
     padding-bottom: 70px;
 }
 
+.alert-danger {
+    padding-top: 20px;
+}
+
 img {
     width: 100%;
 }
