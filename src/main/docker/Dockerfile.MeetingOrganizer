@@ -1,0 +1,16 @@
+FROM alpine:edge
+MAINTAINER Aleksander Kolata <olek.tbg.konta@gmail.com>
+
+# This Dockerfile is used with manually building docker's image
+
+# === Install Java8
+RUN apk add --no-cache openjdk8
+
+VOLUME /tmp
+
+# == add .jar with appication to image
+ADD meetingorganizer-0.1.0.jar /opt/app.jar
+
+EXPOSE 8080
+
+CMD ["/usr/bin/java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/opt/app.jar"]

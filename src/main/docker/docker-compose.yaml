@@ -1,0 +1,27 @@
+version: '3'
+services:
+  meetingorganizer-db:
+    image: mysql:latest
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_USER: 'mo_user'
+      MYSQL_PASSWORD: 'mo_pass'
+      MYSQL_DATABASE: 'meeting_organizer'
+
+  meetingorganizer-core:
+    image: mo/core
+    build:
+      context: .
+      dockerfile: Dockerfile.MeetingOrganizer
+    environment:
+          SPRING_DATASOURCE_URL: 'jdbc:mysql://meetingorganizer-db:3306/meeting_organizer'
+    ports:
+      - 8080:8080
+    expose:
+      - 8080
+    depends_on:
+      - meetingorganizer-db
