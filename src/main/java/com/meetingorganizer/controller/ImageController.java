@@ -26,7 +26,11 @@ public class ImageController {
 
     @GetMapping(path = "/profile/{id}/image")
     public void getUsersProfileImage(@PathVariable long id, HttpServletResponse response) throws IOException {
-        response.getOutputStream().write(userService.findOne(id).getProfilePicture());
-        response.setContentType("image/jpg");
+        byte[] image = userService.findOne(id).getProfilePicture();
+
+        if(image != null){
+            response.getOutputStream().write(userService.findOne(id).getProfilePicture());
+            response.setContentType("image/jpg");
+        }
     }
 }

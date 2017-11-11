@@ -2,8 +2,10 @@ package com.meetingorganizer.service;
 
 import com.meetingorganizer.domain.User;
 import com.meetingorganizer.domain.VerificationToken;
-import com.meetingorganizer.dto.EditProfileDto;
 import com.meetingorganizer.dto.RegistrationFormDto;
+import com.meetingorganizer.dto.profile.ProfileInfoDto;
+import com.meetingorganizer.dto.profile.ProfileMailDto;
+import com.meetingorganizer.dto.profile.ProfilePasswordDto;
 
 /**
  * @author Aleksander
@@ -22,7 +24,11 @@ public interface UserService {
 
     void createVerificationToken(User user, String token);
 
-    void updateUserProfile(User user, EditProfileDto dto);
+    void updateUserProfile(User user, ProfileInfoDto dto);
+
+    void updateUserProfile(User user, ProfileMailDto dto);
+
+    void updateUserProfile(User user, ProfilePasswordDto dto);
 
     VerificationToken getVerificationToken(String token);
 

@@ -21,15 +21,15 @@
         <div class="row" id="profile-info">
             <div class="col-xs-12 col-sm-4">
                 <img src="http://thetransformedmale.files.wordpress.com/2011/06/bruce-wayne-armani.jpg"
-                     th:src="@{/profile/{id}/image(id=${dto.getId()})}" alt="" class="img-rounded"/>
+                     th:src="@{/profile/{id}/image(id=${user.getId()})}" alt="" class="img-rounded"/>
             </div>
             <div class="col-xs-12 col-sm-8">
                 <div class="row">
                     <div class="col-xs-12 col-sm-8 col-sm-offset-2">
                         <blockquote>
-                            <p><span th:text="|${dto.getFirstName()} ${dto.getLastName()}|">Name Surname</span></p>
-                            <span class="glyphicon glyphicon-envelope"></span><span th:text="| ${dto.getEmail()}|"></span> <br/>
-                            <span class="glyphicon glyphicon-phone"></span><span th:text="| ${dto.getPhone() ?: ''}|"></span> <br/>
+                            <p><span th:text="|${user.getFirstName()} ${user.getLastName()}|">Name Surname</span></p>
+                            <span class="glyphicon glyphicon-envelope"></span><span th:text="| ${user.getEmail()}|"></span> <br/>
+                            <span class="glyphicon glyphicon-phone"></span><span th:text="| ${user.getPhone() ?: ''}|"></span> <br/>
                         </blockquote>
                     </div>
                 </div>

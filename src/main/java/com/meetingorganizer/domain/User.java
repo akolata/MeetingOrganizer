@@ -1,6 +1,5 @@
 package com.meetingorganizer.domain;
 
-import com.meetingorganizer.dto.EditProfileDto;
 import com.meetingorganizer.dto.RegistrationFormDto;
 import lombok.Getter;
 import lombok.Setter;
@@ -114,14 +113,6 @@ public class User
         accountNonExpired = true;
         accountNonLocked = true;
         credentialsNonExpired = true;
-    }
-
-    public void updateUserFromDto(EditProfileDto dto){
-        this.firstName = dto.getFirstName();
-        this.lastName = dto.getLastName();
-        this.phone = dto.getPhone();
-        this.email = dto.getEmail();
-        this.password = dto.getPassword();
     }
 
     @Override

@@ -18,26 +18,29 @@
         <p>Navbar</p>
     </div>
     <div class="container">
-        <form class="form-horizontal" th:method="POST" th:object="${dto}">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
+
+        <!-- Profile's info form-->
+        <form class="form-horizontal" th:method="POST" th:object="${infoDto}">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
             <div th:class="${#fields.hasErrors('firstName')}? 'form-group has-error' : 'form-group'">
                 <label for="first-name" class="col-xs-12 col-sm-2" th:text="#{label.firstName}">First Name</label>
                 <div class="col-xs-12 col-sm-8">
-                    <input id="first-name" class="form-control" type="text" th:placeholder="#{label.firstName}" th:field="*{firstName}"/>
+                    <input id="first-name" class="form-control" type="text"
+                           th:placeholder="#{label.firstName}" th:field="*{firstName}"/>
                     <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('firstName')}">
                         <p th:errors="*{firstName}">firstName error message</p>
                     </div>
                 </div>
-
             </div>
 
 
             <div th:class="${#fields.hasErrors('lastName')}? 'form-group has-error' : 'form-group'">
                 <label for="last-name" class="col-xs-12 col-sm-2" th:text="#{label.lastName}">Last Name</label>
                 <div class="col-xs-12 col-sm-8">
-                    <input id="last-name" class="form-control" type="text" th:placeholder="#{label.lastName}" th:field="*{lastName}"/>
+                    <input id="last-name" class="form-control" type="text"
+                           th:placeholder="#{label.lastName}" th:field="*{lastName}"/>
                     <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('lastName')}">
                         <p th:errors="*{lastName}">lastName error message</p>
                     </div>
@@ -48,18 +51,34 @@
             <div th:class="${#fields.hasErrors('phone')}? 'form-group has-error' : 'form-group'">
                 <label for="phone" class="col-xs-12 col-sm-2" th:text="#{label.phone}">Phone</label>
                 <div class="col-xs-12 col-sm-8">
-                    <input id="phone" class="form-control" type="text" th:placeholder="#{label.phone}" th:field="*{phone}"/>
+                    <input id="phone" class="form-control" type="text"
+                           th:placeholder="#{label.phone}" th:field="*{phone}"/>
                     <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('phone')}">
                         <p th:errors="*{phone}">phone error message</p>
                     </div>
                 </div>
             </div>
 
+            <div class="form-group">
+                <div class="col-xs-12 col-sm-3 col-sm-offset-4">
+                    <button class="btn btn-default btn-block" th:text="#{editProfilePage.btn.editInfo}" name="editInfo">
+                        Edit profile info
+                    </button>
+                </div>
+            </div>
+        </form>
+        <!-- Profile's info form-->
+
+
+        <!-- Profile's mail form-->
+        <form class="form-horizontal" th:method="POST" th:object="${mailDto}">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
             <div th:class="${#fields.hasErrors('email') or emailAlreadyTaken == true or confirmEmail == true}? 'form-group has-error' : 'form-group'">
                 <label for="mail" class="col-xs-12 col-sm-2" th:text="#{label.email}">Mail</label>
                 <div class="col-xs-12 col-sm-8">
-                    <input id="mail" class="form-control" type="email" th:placeholder="#{label.email}" th:field="*{email}"/>
+                    <input id="mail" class="form-control" type="email"
+                           th:placeholder="#{label.email}" th:field="*{email}"/>
                     <div role="alert"
                          class="alert alert-danger"
                          th:if="${#fields.hasErrors('email') or emailAlreadyTaken == true or confirmEmail == true}">
@@ -74,8 +93,10 @@
             <div th:class="${#fields.hasErrors('confirmEmail') or emailsNotMatch != null}? 'form-group has-error' : 'form-group'">
                 <label for="confirm-mail" class="col-xs-12 col-sm-2" th:text="#{label.confirmEmail}">Confirm Mail</label>
                 <div class="col-xs-12 col-sm-8">
-                    <input id="confirm-mail" class="form-control" type="email" th:placeholder="#{label.confirmEmail}" th:field="*{confirmEmail}"/>
-                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('confirmEmail') or emailsNotMatch != null}">
+                    <input id="confirm-mail" class="form-control"
+                           type="email" th:placeholder="#{label.confirmEmail}" th:field="*{confirmEmail}"/>
+                    <div class="alert alert-danger" role="alert"
+                         th:if="${#fields.hasErrors('confirmEmail') or emailsNotMatch != null}">
                         <p th:errors="*{confirmEmail}">confirmEmail error message</p>
                         <p th:text="${emailsNotMatch}">Emails do not match</p>
                     </div>
@@ -83,11 +104,30 @@
             </div>
 
 
+            <div class="form-group">
+                <div class="col-xs-12 col-sm-3 col-sm-offset-4">
+                    <button class="btn btn-default btn-block" th:text="#{editProfilePage.btn.changeMail}"
+                            name="editMail">
+                        Change mail
+                    </button>
+                </div>
+            </div>
+        </form>
+        <!-- Profile's mail form-->
+
+
+        <!-- Profile's password form-->
+        <form class="form-horizontal" th:method="POST" th:object="${passwordDto}">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+
             <div th:class="${#fields.hasErrors('oldPassword') or currentPasswordNotEqual == true}? 'form-group has-error' : 'form-group'">
                 <label for="old-password" class="col-xs-12 col-sm-2" th:text="#{label.oldPassword}">Old password</label>
                 <div class="col-xs-12 col-sm-8">
-                    <input id="old-password" class="form-control" type="password" th:placeholder="#{label.oldPassword}" th:field="*{oldPassword}"/>
-                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('oldPassword') or currentPasswordNotEqual == true}">
+                    <input id="old-password" class="form-control" type="password"
+                           th:placeholder="#{label.oldPassword}" th:field="*{oldPassword}"/>
+                    <div class="alert alert-danger" role="alert"
+                         th:if="${#fields.hasErrors('oldPassword') or currentPasswordNotEqual == true}">
                         <p th:errors="*{oldPassword}">oldPassword error message</p>
                         <p th:text="#{currentPasswordNotEqual}">currentPasswordNotEqual</p>
                     </div>
@@ -98,7 +138,8 @@
             <div th:class="${#fields.hasErrors('password')}? 'form-group has-error' : 'form-group'">
                 <label for="password" class="col-xs-12 col-sm-2" th:text="#{label.password}">Password</label>
                 <div class="col-xs-12 col-sm-8">
-                    <input id="password" class="form-control" type="password" th:placeholder="#{label.password}" th:field="*{password}"/>
+                    <input id="password" class="form-control" type="password"
+                           th:placeholder="#{label.password}" th:field="*{password}"/>
                     <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('password')}">
                         <p th:errors="*{password}">password error message</p>
                     </div>
@@ -109,8 +150,10 @@
             <div th:class="${#fields.hasErrors('confirmPassword') or passwordsNotMatch != null}? 'form-group has-error' : 'form-group'">
                 <label for="confirm-password" class="col-xs-12 col-sm-2" th:text="#{label.confirmPassword}">Confirm password</label>
                 <div class="col-xs-12 col-sm-8">
-                    <input id="confirm-password" class="form-control" type="password" th:placeholder="#{label.confirmPassword}" th:field="*{confirmPassword}"/>
-                    <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('confirmPassword') or passwordsNotMatch != null}">
+                    <input id="confirm-password" class="form-control" type="password"
+                           th:placeholder="#{label.confirmPassword}" th:field="*{confirmPassword}"/>
+                    <div class="alert alert-danger" role="alert"
+                         th:if="${#fields.hasErrors('confirmPassword') or passwordsNotMatch != null}">
                         <p th:errors="*{confirmPassword}">confirmPassword error message</p>
                         <p th:text="${passwordsNotMatch}">Passwords do not match</p>
                     </div>
@@ -118,14 +161,18 @@
             </div>
 
 
-            <div th:class="${#fields.hasErrors('firstName')}? 'form-group has-error' : 'form-group'">
+            <div class="form-group">
                 <div class="col-xs-12 col-sm-3 col-sm-offset-4">
-                    <button class="btn btn-default btn-block" th:text="#{button.saveChanges}">Save changes</button>
+                    <button class="btn btn-default btn-block" th:text="#{editProfilePage.btn.changePassword}"
+                            name="editPassword">
+                        Change password
+                    </button>
                 </div>
             </div>
-
-
         </form>
+        <!-- Profile's password form-->
+
+
         <div class="col-xs-12 col-sm-offset-2">
             <a th:href="@{/profile}" th:text="#{href.backToProfilePage}">Back to profile</a>
         </div>
