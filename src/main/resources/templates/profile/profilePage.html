@@ -53,7 +53,7 @@
                     </div>
 
                     <div class="col-xs-12 col-sm-8 col-sm-offset-2">
-                        <form class="form-horizontal text-center" th:method="POST" enctype="multipart/form-data">
+                        <form class="form-horizontal text-center" th:action="@{/profile}" th:method="POST" enctype="multipart/form-data">
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                             <div class="form-group">
                                 <label for="profile-image" th:text="#{profilePage.chooseImage}">Profile Image</label>
