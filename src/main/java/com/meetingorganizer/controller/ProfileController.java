@@ -85,7 +85,8 @@ public class ProfileController {
     @PostMapping(path = "/edit", params = "editInfo")
     public String processEditInfoForm(@Valid @ModelAttribute(name = PROFILE_INFO_DTO) ProfileInfoDto dto,
                                       BindingResult bindingResult,
-                                      Authentication authentication) {
+                                      Authentication authentication,
+                                      Model model) {
 
         User currentUser = (User) authentication.getPrincipal();
 
@@ -94,6 +95,8 @@ public class ProfileController {
         }
 
         userService.updateUserProfile(currentUser, dto);
+
+        model.addAttribute("updateSuccessful", Boolean.TRUE);
         return EDIT_PROFILE_PAGE;
     }
 
@@ -119,8 +122,9 @@ public class ProfileController {
             return EDIT_PROFILE_PAGE;
         }
 
-
         userService.updateUserProfile(currentUser, dto);
+
+        model.addAttribute("updateSuccessful", Boolean.TRUE);
         return EDIT_PROFILE_PAGE;
     }
 
@@ -142,12 +146,14 @@ public class ProfileController {
             return EDIT_PROFILE_PAGE;
         }
 
-        if (!userService.isPasswordDifferentThanCurrent(dto.getPassword(), currentUser)) {
+        if (!userService.passwordMatchesStoredPassword(dto.getOldPassword(), currentUser)) {
             model.addAttribute("currentPasswordNotEqual", Boolean.TRUE);
             return EDIT_PROFILE_PAGE;
         }
 
         userService.updateUserProfile(currentUser, dto);
+
+        model.addAttribute("updateSuccessful", Boolean.TRUE);
         return EDIT_PROFILE_PAGE;
     }
 

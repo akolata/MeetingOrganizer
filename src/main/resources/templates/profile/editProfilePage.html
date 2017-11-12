@@ -18,7 +18,11 @@
         <p>Navbar</p>
     </div>
     <div class="container">
-
+        <div th:if="${updateSuccessful}" class="row">
+            <div class="alert alert-success col-xs-12 col-sm-6 col-sm-offset-3" role="alert">
+                <p th:text="#{editProfilePage.updateSuccessful}">Update done</p>
+            </div>
+        </div>
 
         <!-- Profile's info form-->
         <form class="form-horizontal" th:method="POST" th:object="${infoDto}">
@@ -61,7 +65,7 @@
 
             <div class="form-group">
                 <div class="col-xs-12 col-sm-3 col-sm-offset-4">
-                    <button class="btn btn-default btn-block" th:text="#{editProfilePage.btn.editInfo}" name="editInfo">
+                    <button class="btn btn-default btn-block" th:text="#{editProfilePage.btn.editInfo}" name="editInfo" value="editInfo">
                         Edit profile info
                     </button>
                 </div>

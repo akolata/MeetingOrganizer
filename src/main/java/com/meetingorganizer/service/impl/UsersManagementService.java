@@ -93,12 +93,12 @@ public class UsersManagementService implements UserService {
     }
 
     @Override
-    public boolean isPasswordDifferentThanCurrent(String password, User user) {
-        if(passwordEncoder.encode(password).equals(user.getPassword())){
+    public boolean passwordMatchesStoredPassword(String password, User user) {
+        if(passwordEncoder.matches(password, user.getPassword())){
+            return true;
+        }else{
             return false;
         }
-
-        return true;
     }
 
     @Override

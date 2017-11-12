@@ -14,7 +14,7 @@ public interface UserService {
 
     boolean isEmailAlreadyTaken(String email);
 
-    boolean isPasswordDifferentThanCurrent(String password, User user);
+    boolean passwordMatchesStoredPassword(String password, User user);
 
     User registerUser(RegistrationFormDto dto);
 
