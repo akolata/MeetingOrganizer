@@ -29,6 +29,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -57,7 +58,7 @@ public class ProfileControllerTest {
 
 
     @Before
-    public void setup(){
+    public void setup() {
         mvc = MockMvcBuilders
                 .webAppContextSetup(wac)
                 .addFilter(springSecurityFilterChain)
@@ -71,8 +72,8 @@ public class ProfileControllerTest {
 
     @Test
     public void displayProfilePage_returnValidViewNameAndHasModelAttribute() throws Exception {
-        mvc.perform(
-                get(PROFILE_URL).with(user(new User())))
+        mvc.perform(get(PROFILE_URL)
+                .with(user(new User())))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists(ProfileController.USER_ATTRIBUTE))
                 .andExpect(view().name(ProfileController.PROFILE_PAGE));
@@ -83,12 +84,49 @@ public class ProfileControllerTest {
         MockMultipartFile file = new MockMultipartFile("file", "orig",
                 MediaType.IMAGE_JPEG_VALUE, "image".getBytes());
 
-        mvc.perform(fileUpload(PROFILE_URL).file(file)
-                .with(csrf())
-                .with(user(sampleUser()))
-                .accept(MediaType.MULTIPART_FORM_DATA_VALUE)).andExpect(status().isOk());
+        mvc.perform(
+                fileUpload(PROFILE_URL).file(file)
+                        .with(csrf())
+                        .with(user(sampleUser()))
+                        .accept(MediaType.MULTIPART_FORM_DATA_VALUE))
+                .andExpect(status().isOk())
+                .andDo(print());
 
         verify(userService, times(1)).saveUserAndFlush(any(User.class));
+    }
+
+    @Test
+    public void uploadProfileImage_fileIsEmpty_shouldRedirectAndShowMessage() throws Exception {
+        MockMultipartFile file = new MockMultipartFile("file", "orig",
+                MediaType.IMAGE_JPEG_VALUE, new byte[]{});
+
+        mvc.perform(
+                fileUpload(PROFILE_URL).file(file)
+                        .with(csrf())
+                        .with(user(sampleUser()))
+                        .accept(MediaType.MULTIPART_FORM_DATA_VALUE))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/profile"))
+                .andExpect(flash().attributeCount(1));
+
+        verify(userService, times(0)).saveUserAndFlush(any(User.class));
+    }
+
+    @Test
+    public void uploadProfileImage_fileIsNotAnImage_shouldRedirectAndShowMessage() throws Exception {
+        MockMultipartFile file = new MockMultipartFile("file", "orig",
+                MediaType.APPLICATION_JSON_UTF8_VALUE, new byte[]{});
+
+        mvc.perform(
+                fileUpload(PROFILE_URL).file(file)
+                        .with(csrf())
+                        .with(user(sampleUser()))
+                        .accept(MediaType.MULTIPART_FORM_DATA_VALUE))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/profile"))
+                .andExpect(flash().attributeCount(1));
+
+        verify(userService, times(0)).saveUserAndFlush(any(User.class));
     }
 
     @Test
