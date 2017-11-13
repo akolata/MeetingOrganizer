@@ -71,6 +71,12 @@ public class User
     @Type(type = "numeric_boolean")
     private boolean accountNonLocked;
 
+    @Column(name = "PROFILE_PICTURE")
+    @Lob
+    @Getter @Setter
+    private byte[] profilePicture;
+
+
     @ManyToMany(fetch = FetchType.EAGER,
             cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "USER_AUTHORITY",

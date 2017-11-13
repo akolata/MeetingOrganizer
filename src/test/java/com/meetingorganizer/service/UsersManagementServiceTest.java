@@ -107,7 +107,7 @@ public class UsersManagementServiceTest {
         user.setEmail("user@mail.com");
 
         when(userRepository.saveAndFlush(any(User.class))).thenReturn(user);
-        User savedUser = userService.saveUser(user);
+        User savedUser = userService.saveUserAndFlush(user);
 
         assertNotNull(savedUser);
         assertEquals(user.getEmail(), savedUser.getEmail());

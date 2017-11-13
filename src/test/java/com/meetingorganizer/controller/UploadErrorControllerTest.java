@@ -3,6 +3,7 @@ package com.meetingorganizer.controller;
 import com.meetingorganizer.DemoApplication;
 import com.meetingorganizer.config.MeetingOrganizerConfiguration;
 import com.meetingorganizer.config.SecurityConfiguration;
+import com.meetingorganizer.domain.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,21 +16,20 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.servlet.Filter;
 
-import static org.junit.Assert.assertNotNull;
+import static junit.framework.TestCase.assertNotNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 /**
- * Tests for HomeController
  * @author Aleksander
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {DemoApplication.class, SecurityConfiguration.class, MeetingOrganizerConfiguration.class})
-public class HomeControllerTest {
+public class UploadErrorControllerTest {
 
-    private static final String HOME_URL = "/home";
+    private MockMvc mvc;
 
     @Autowired
     private WebApplicationContext wac;
@@ -38,12 +38,11 @@ public class HomeControllerTest {
     private Filter springSecurityFilterChain;
 
     @Autowired
-    private HomeController homeController;
+    private UploadErrorController uploadErrorController;
 
-    private MockMvc mvc;
 
     @Before
-    public void setUp() {
+    public void setup(){
         mvc = MockMvcBuilders
                 .webAppContextSetup(wac)
                 .addFilter(springSecurityFilterChain)
@@ -51,15 +50,15 @@ public class HomeControllerTest {
     }
 
     @Test
-    public void homeController_isNotNull() {
-        assertNotNull(homeController);
+    public void uploadErrorController_isNotNull() {
+        assertNotNull(uploadErrorController);
     }
 
     @Test
-    public void displayHomePage_returnsValidViewName() throws Exception {
-        mvc.perform(get(HOME_URL)
-                .with(user("user")))
+    public void showUploadErorPage_hasValidViewName() throws Exception {
+        mvc.perform(get("/uploadError")
+                .with(user(new User()) ))
                 .andExpect(status().isOk())
-                .andExpect(view().name(HomeController.HOME_PAGE));
+                .andExpect(view().name(UploadErrorController.UPLOAD_ERROR_PAGE));
     }
 }

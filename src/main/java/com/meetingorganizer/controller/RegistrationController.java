@@ -125,7 +125,7 @@ public class RegistrationController {
         User userForToken = verificationToken.getUser();
 
         userForToken.setEnabled(true);
-        userService.saveUser(userForToken);
+        userService.saveUserAndFlush(userForToken);
 
         redirectAttributes.addFlashAttribute("userEnabled", Boolean.TRUE);
         return REDIRECT_TO_LOGIN_PAGE;

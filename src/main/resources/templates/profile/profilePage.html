@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html ;charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title th:text="#{profilePage.title}">Login</title>
+    <link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css"
+          rel="stylesheet"
+          type="text/css"/>
+    <link th:href="@{/css/style.css}"
+          href="../../static/css/style.css"
+          rel="stylesheet"
+          type="text/css" />
+</head>
+<body>
+    <div th:replace="fragments/common :: navbar">
+        <p>Navbar</p>
+    </div>
+    <div class="container">
+        <div class="row" id="profile-info">
+            <div class="col-xs-12 col-sm-4">
+                <img src="http://thetransformedmale.files.wordpress.com/2011/06/bruce-wayne-armani.jpg"
+                     th:src="@{/profile/{id}/image(id=${user.getId()})}" alt="" class="img-rounded"/>
+            </div>
+            <div class="col-xs-12 col-sm-8">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+                        <blockquote>
+                            <p><span th:text="|${user.getFirstName()} ${user.getLastName()}|">Name Surname</span></p>
+                            <span class="glyphicon glyphicon-envelope"></span><span th:text="| ${user.getEmail()}|"></span> <br/>
+                            <span class="glyphicon glyphicon-phone"></span><span th:text="| ${user.getPhone() ?: ''}|"></span> <br/>
+                        </blockquote>
+                    </div>
+                </div>
+                <div class="row">
+                    <div th:if="${fileEmptyError}" class="row">
+                        <div class="alert alert-danger col-xs-12 col-sm-6 col-sm-offset-2" role="alert">
+                            <p th:text="#{profilePage.chooseImage.fileEmpty}">Image exception</p>
+                        </div>
+                    </div>
+
+                    <div th:if="${fileNotImage}" class="row">
+                        <div class="alert alert-danger col-xs-12 col-sm-6 col-sm-offset-2" role="alert">
+                            <p th:text="#{profilePage.chooseImage.otherFile}">Image exception</p>
+                        </div>
+                    </div>
+
+                    <div th:if="${uploadError}" class="row">
+                        <div class="alert alert-danger col-xs-12 col-sm-6 col-sm-offset-2" role="alert">
+                            <p th:text="#{profilePage.chooseImage.ioexception}">IO exception</p>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+                        <form class="form-horizontal text-center" th:action="@{/profile}" th:method="POST" enctype="multipart/form-data">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <div class="form-group">
+                                <label for="profile-image" th:text="#{profilePage.chooseImage}">Profile Image</label>
+                                <input type="file" name="file" id="profile-image"/>
+                            </div>
+                            <button type="submit" class="btn btn-default">Change profile picture</button>
+                        </form>
+                    </div>
+                </div>
+                <br/>
+                <div class="text-center">
+                    <a th:href="@{/profile/edit}" th:text="#{profilePage.editProfile}">Edit profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="fragments/common :: footer">
+        <p>Footer</p>
+    </div>
+    <div th:replace="fragments/common :: scripts">
+        <p>Scripts</p>
+    </div>
+    <script th:src="@{/js/profile.js}" src="../resources/static/profile.js"></script>
+</body>
+</html>

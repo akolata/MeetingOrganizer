@@ -5,17 +5,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * Home page controller
  * @author Aleksander
  */
 @Controller
-@RequestMapping("/home")
-public class HomeController {
+@RequestMapping("/uploadError")
+public class UploadErrorController {
 
-    public static final String HOME_PAGE = "homePage";
+    public static final String UPLOAD_ERROR_PAGE = "error/uploadErrorPage";
 
     @GetMapping
-    public String displayHomePage() {
-        return HOME_PAGE;
+    public String showUploadErorPage() {
+        return UPLOAD_ERROR_PAGE;
     }
 }
