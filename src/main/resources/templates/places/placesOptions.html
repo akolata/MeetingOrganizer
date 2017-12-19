@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="placesOptionsThumbnails">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+            <div class="thumbnail">
+                <div class="caption">
+                    <h3 th:text="#{placesPage.placesOptions.browsePlaces.title}">Title</h3>
+                    <p th:text="#{placesPage.placesOptions.browsePlaces.text}">Text</p>
+                    <p>
+                        <a th:href="@{/places/browse}" class="btn btn-primary"
+                           role="button" th:text="#{href.browse}">Browse</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <div class="thumbnail">
+                <div class="caption">
+                    <h3 th:text="#{placesPage.placesOptions.addPlaces.title}">Title</h3>
+                    <p th:text="#{placesPage.placesOptions.addPlaces.text}">Text</p>
+                    <p>
+                        <a th:href="@{/places/add}" class="btn btn-primary"
+                           role="button" th:text="#{href.add}">Add</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
