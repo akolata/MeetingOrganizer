@@ -4,7 +4,7 @@
     <meta charset="UTF-8"/>
     <meta http-equiv="Content-Type" content="text/html ;charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title th:text="#{placesPage.browsePlaces.title}">Browse places</title>
+    <title th:text="#{locationPage.browseLocations.title}">Browse places</title>
     <link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css"
           rel="stylesheet"
           type="text/css"/>
@@ -18,8 +18,8 @@
     <p>Navbar</p>
 </div>
 <div class="container">
-    <div th:replace="places/placesOptions :: placesOptionsThumbnails">
-        <p>Places options</p>
+    <div th:replace="location/locationOptions :: locationOptionsThumbnails">
+        <p>Location options</p>
     </div>
 </div>
 <div th:replace="fragments/common :: footer">
@@ -28,6 +28,6 @@
 <div th:replace="fragments/common :: scripts">
     <p>Scripts</p>
 </div>
-<script th:src="@{/js/places.js}" src="../resources/static/places.js"></script>
+<script th:src="@{/js/location.js}" src="../resources/static/location.js"></script>
 </body>
 </html>

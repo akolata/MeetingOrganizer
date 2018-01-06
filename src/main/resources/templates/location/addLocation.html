@@ -4,7 +4,7 @@
     <meta charset="UTF-8"/>
     <meta http-equiv="Content-Type" content="text/html ;charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title th:text="#{placesPage.addPlace.title}">Add place</title>
+    <title th:text="#{locationPage.addLocation.title}">Add place</title>
     <link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css"
           rel="stylesheet"
           type="text/css"/>
@@ -18,14 +18,14 @@
     <p>Navbar</p>
 </div>
 <div class="container">
-    <div th:replace="places/placesOptions :: placesOptionsThumbnails">
-        <p>Places options</p>
+    <div th:replace="location/locationOptions :: locationOptionsThumbnails">
+        <p>Location options</p>
     </div>
     <form class="form-horizontal" th:method="POST" th:object="${dto}">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
         <div th:class="${#fields.hasErrors('name')}? 'form-group has-error' : 'form-group'">
-            <label for="name" th:text="#{placesPage.addPlace.name.label}"
+            <label for="name" th:text="#{locationPage.addLocation.name.label}"
                    class="col-sm-2 control-label">Name</label>
             <div class="col-sm-8">
                 <input id="name" class="form-control" th:field="*{name}"/>
@@ -36,7 +36,7 @@
         </div>
 
         <div th:class="${#fields.hasErrors('description')}? 'form-group has-error' : 'form-group'">
-            <label for="description" th:text="#{placesPage.addPlace.description.label}"
+            <label for="description" th:text="#{locationPage.addLocation.description.label}"
                    class="col-sm-2 control-label">Description</label>
             <div class="col-sm-8">
                 <textarea id="description" class="form-control" rows="2" th:field="*{description}"/>
@@ -47,7 +47,7 @@
         </div>
 
         <div th:class="${#fields.hasErrors('maxMembers')}? 'form-group has-error' : 'form-group'">
-            <label for="max-members" th:text="#{placesPage.addPlace.maxMembers.label}"
+            <label for="max-members" th:text="#{locationPage.addLocation.maxMembers.label}"
                    class="col-sm-2 control-label">Max members</label>
             <div class="col-sm-4">
                 <input type="number" id="max-members" class="form-control" min="1" max="300" th:field="*{maxMembers}"/>
@@ -70,6 +70,6 @@
 <div th:replace="fragments/common :: scripts">
     <p>Scripts</p>
 </div>
-<script th:src="@{/js/places.js}" src="../resources/static/places.js"></script>
+<script th:src="@{/js/location.js}" src="../resources/static/location.js"></script>
 </body>
 </html>

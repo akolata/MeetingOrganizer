@@ -12,37 +12,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/places")
-public class PlacesController {
+@RequestMapping("/location")
+public class LocationController {
 
-    public static final String PLACES_PAGE = "places/places";
-    public static final String ADD_PLACE_PAGE = "places/addPlace";
-    public static final String BROWSE_PLACES_PAGE = "places/browsePlaces";
+    public static final String LOCATIONS_PAGE = "location/locations";
+    public static final String ADD_LOCATION_PAGE = "location/addLocation";
+    public static final String BROWSE_LOCATIONS_PAGE = "location/browseLocations";
 
     @GetMapping
-    public String displayPlacesPage() {
-        return PLACES_PAGE;
+    public String displayLocationsPage() {
+        return LOCATIONS_PAGE;
     }
 
     @GetMapping(value = "/browse")
-    public String displayBrowsePlacesPage() {
-        return BROWSE_PLACES_PAGE;
+    public String displayBrowseLocationsPage() {
+        return BROWSE_LOCATIONS_PAGE;
     }
 
     @GetMapping(value = "/add")
-    public String displayAddPlacePage(Model model) {
+    public String displayAddLocationPage(Model model) {
         model.addAttribute("dto", new AddLocationDto());
-        return ADD_PLACE_PAGE;
+        return ADD_LOCATION_PAGE;
     }
 
     @PostMapping(value = "/add")
-    public String processAddPlaceForm(@Valid @ModelAttribute(name = "dto") AddLocationDto dto,
-                                      BindingResult bindingResult) {
+    public String processAddLocationForm(@Valid @ModelAttribute(name = "dto") AddLocationDto dto,
+                                         BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return ADD_PLACE_PAGE;
+            return ADD_LOCATION_PAGE;
         }
 
-        return PLACES_PAGE;
+        return LOCATIONS_PAGE;
     }
 }

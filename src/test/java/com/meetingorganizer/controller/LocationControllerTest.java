@@ -25,11 +25,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {DemoApplication.class, SecurityConfiguration.class, MeetingOrganizerConfiguration.class})
-public class PlacesControllerTest {
+public class LocationControllerTest {
 
-    private static final String PLACES_URL = "/places";
-    private static final String ADD_PLACE_URL = "/places/add";
-    private static final String BROWSE_PLACES_URL = "/places/browse";
+    private static final String LOCATIONS_URL = "/location";
+    private static final String ADD_LOCATION_URL = "/location/add";
+    private static final String BROWSE_LOCATIONS_URL = "/location/browse";
 
     private MockMvc mvc;
 
@@ -40,7 +40,7 @@ public class PlacesControllerTest {
     private Filter springSecurityFilterChain;
 
     @Autowired
-    private PlacesController placesController;
+    private LocationController locationController;
 
     @Before
     public void setup() {
@@ -51,34 +51,34 @@ public class PlacesControllerTest {
     }
 
     @Test
-    public void placesController_isNotNull() {
-        assertNotNull(placesController);
+    public void locationController_isNotNull() {
+        assertNotNull(locationController);
     }
 
     @Test
-    public void displayPlacesPage_shouldReturnValidViewName() throws Exception {
-        mvc.perform(get(PLACES_URL)
+    public void displayLocationsPage_shouldReturnValidViewName() throws Exception {
+        mvc.perform(get(LOCATIONS_URL)
                 .with(user(TestHelper.sampleUser()))
                 .accept(MediaType.TEXT_HTML_VALUE))
-                .andExpect(view().name(PlacesController.PLACES_PAGE))
+                .andExpect(view().name(LocationController.LOCATIONS_PAGE))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void displayBrowsePlacesPage_shouldReturnValidViewName() throws Exception {
-        mvc.perform(get(BROWSE_PLACES_URL)
+    public void displayBrowseLocationsPage_shouldReturnValidViewName() throws Exception {
+        mvc.perform(get(BROWSE_LOCATIONS_URL)
                 .with(user(TestHelper.sampleUser()))
                 .accept(MediaType.TEXT_HTML_VALUE))
-                .andExpect(view().name(PlacesController.BROWSE_PLACES_PAGE))
+                .andExpect(view().name(LocationController.BROWSE_LOCATIONS_PAGE))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void displayAddPlacePage_shouldReturnValidViewName() throws Exception {
-        mvc.perform(get(ADD_PLACE_URL)
+    public void displayAddLocationPage_shouldReturnValidViewName() throws Exception {
+        mvc.perform(get(ADD_LOCATION_URL)
                 .with(user(TestHelper.sampleUser()))
                 .accept(MediaType.TEXT_HTML_VALUE))
-                .andExpect(view().name(PlacesController.ADD_PLACE_PAGE))
+                .andExpect(view().name(LocationController.ADD_LOCATION_PAGE))
                 .andExpect(status().isOk());
     }
 
