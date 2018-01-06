@@ -1,5 +1,6 @@
 package com.meetingorganizer.domain;
 
+import com.meetingorganizer.dto.location.AddLocationDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -46,6 +47,13 @@ public class Location {
 
     public Location() {
         this.reservations = new LinkedList<>();
+    }
+
+    public Location(AddLocationDto dto) {
+        this();
+        this.name = dto.getName();
+        this.description = dto.getDescription();
+        this.maxMembers = dto.getMaxMembers();
     }
 
     @Override

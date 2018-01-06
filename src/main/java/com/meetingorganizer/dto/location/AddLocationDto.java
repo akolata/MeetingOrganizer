@@ -1,5 +1,6 @@
-package com.meetingorganizer.dto.places;
+package com.meetingorganizer.dto.location;
 
+import com.meetingorganizer.validation.UniqueLocationName;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,6 +15,7 @@ import javax.validation.constraints.Min;
 public class AddLocationDto {
 
     @NotBlank
+    @UniqueLocationName
     private String name;
 
     @NotBlank

@@ -1,6 +1,9 @@
 package com.meetingorganizer.controller;
 
-import com.meetingorganizer.dto.places.AddLocationDto;
+import com.meetingorganizer.domain.Location;
+import com.meetingorganizer.dto.location.AddLocationDto;
+import com.meetingorganizer.service.LocationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +21,13 @@ public class LocationController {
     public static final String LOCATIONS_PAGE = "location/locations";
     public static final String ADD_LOCATION_PAGE = "location/addLocation";
     public static final String BROWSE_LOCATIONS_PAGE = "location/browseLocations";
+
+    private LocationService locationService;
+
+    @Autowired
+    public LocationController(LocationService locationService) {
+        this.locationService = locationService;
+    }
 
     @GetMapping
     public String displayLocationsPage() {
@@ -42,6 +52,9 @@ public class LocationController {
         if (bindingResult.hasErrors()) {
             return ADD_LOCATION_PAGE;
         }
+
+        Location location = new Location(dto);
+        locationService.saveAndFlush(location);
 
         return LOCATIONS_PAGE;
     }
