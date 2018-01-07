@@ -2,8 +2,9 @@
 
     $(document).ready(function () {
         var profileRoutes = ['/profile', '/profile/edit'];
+        var profileRegexRoutes = [];
 
-        addClassToNavigationTab(profileRoutes);
+        addClassToNavigationTab(profileRoutes, profileRegexRoutes);
     });
 
 })(jQuery);

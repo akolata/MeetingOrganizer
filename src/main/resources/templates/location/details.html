@@ -4,7 +4,7 @@
     <meta charset="UTF-8"/>
     <meta http-equiv="Content-Type" content="text/html ;charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title th:text="#{locationPage.browseLocations.title}">Browse places</title>
+    <title th:text="#{locationPage.addLocation.title}">Add place</title>
     <link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css"
           rel="stylesheet"
           type="text/css"/>
@@ -21,25 +21,15 @@
     <div th:replace="location/locationOptions :: locationOptionsThumbnails">
         <p>Location options</p>
     </div>
-    <div class="">
-        <table class="table table-bordered">
-            <tr>
-                <th th:text="#{locationPage.location.name}">Name</th>
-                <th th:text="#{locationPage.location.maxMembers}">Max members</th>
-                <th th:text="#{locationPage.location.action.list}">Actions</th>
-            </tr>
-            <tr th:each="row: ${locations}">
-                <td th:text="${row.name}">name</td>
-                <td th:text="${row.maxMembers}">members</td>
-                <td>
-                    <a th:href="@{/location/{id}/details(id=${row.id})}"
-                       th:text="#{locationPage.location.action.details}">Details</a>
-                    <span>  </span>
-                    <a th:href="@{/meetings/new(locationId=${row.id})}"
-                       th:text="#{locationPage.location.action.choose}">Choose</a>
-                </td>
-            </tr>
-        </table>
+    <div th:if="${location == null}">
+        <div th:replace="location/locationOptions :: locationNotFound"></div>
+    </div>
+    <div th:if="${location != null}">
+        <div th:replace="location/locationOptions :: locationDetails"></div>
+    </div>
+    <br/><br/>
+    <div th:class="text-center">
+        <a th:href="@{/location}" th:text="#{href.backToLocationsPage}">Back to location page</a>
     </div>
 </div>
 <div th:replace="fragments/common :: footer">

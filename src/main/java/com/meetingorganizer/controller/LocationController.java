@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -21,6 +18,7 @@ public class LocationController {
     public static final String LOCATIONS_PAGE = "location/locations";
     public static final String ADD_LOCATION_PAGE = "location/addLocation";
     public static final String BROWSE_LOCATIONS_PAGE = "location/browseLocations";
+    public static final String LOCATION_DETAILS_PAGE = "location/details";
 
     private LocationService locationService;
 
@@ -35,7 +33,8 @@ public class LocationController {
     }
 
     @GetMapping(value = "/browse")
-    public String displayBrowseLocationsPage() {
+    public String displayBrowseLocationsPage(Model model) {
+        model.addAttribute("locations", locationService.findAll());
         return BROWSE_LOCATIONS_PAGE;
     }
 
@@ -57,5 +56,12 @@ public class LocationController {
         locationService.saveAndFlush(location);
 
         return LOCATIONS_PAGE;
+    }
+
+    @GetMapping(value = "/{id}/details")
+    public String displayLocationDetailsPage(Model model, @PathVariable Long id) {
+        model.addAttribute("location", locationService.findOneById(id));
+
+        return LOCATION_DETAILS_PAGE;
     }
 }
