@@ -3,6 +3,7 @@ package com.meetingorganizer.service.impl;
 import com.meetingorganizer.domain.Location;
 import com.meetingorganizer.repository.LocationRepository;
 import com.meetingorganizer.service.LocationService;
+import com.meetingorganizer.utils.PageWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,7 +31,9 @@ public class LocationManagementService implements LocationService {
 
     @Override
     public Page<Location> findAll(int page, int pageSize) {
-        return locationRepository.findAll(new PageRequest(page - 1, pageSize));
+        return locationRepository.findAll(new PageRequest(
+                PageWrapper.adjustPageNumber(page) - 1,
+                PageWrapper.adjustPageSize(pageSize)));
     }
 
     @Override

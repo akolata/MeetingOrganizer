@@ -34,6 +34,13 @@
                 </li>
             </ul>
         </nav>
+
+        <select th:id="page-size-select" th:class="form-control" >
+            <option th:each="pageSize : ${page.pageSizes}"
+                    th:text="${pageSize}"
+                    th:value="${pageSize}"
+                    th:selected="${page.isPageSizeValueEqualToRequest(pageSize,param.pageSize)}">Size</option>
+        </select>
     </div>
 </body>
 </html>

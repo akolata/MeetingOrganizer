@@ -4,10 +4,13 @@ import org.springframework.data.domain.Page;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class PageWrapper<T> {
 
     private static final int MAX_PAGE_NUMBERS_DISPLAYED = 20;
+    public static final int[] PAGE_SIZES = new int[] {5, 10, 15, 20};
+    public static final int DEFAULT_PAGE_SIZE = 10;
 
     private int currentNumber;
     private String viewUrl;
@@ -84,8 +87,29 @@ public class PageWrapper<T> {
         return page;
     }
 
+    public int[] getPageSizes() {
+        return PAGE_SIZES;
+    }
+
     public List<PageItem> getPageItems() {
         return pageItems;
+    }
+
+    public boolean isPageSizeValueEqualToRequest(Integer selectPageSize, Integer requestPageSize) {
+        if(requestPageSize == null) {
+            return selectPageSize == DEFAULT_PAGE_SIZE ? true : false;
+        } else {
+            return selectPageSize == requestPageSize;
+        }
+    }
+
+    public static int adjustPageNumber(int page) {
+        return page > 0 ? page : 1;
+    }
+
+    public static int adjustPageSize(int pageSize) {
+        boolean pageSizeAvailable = IntStream.of(PAGE_SIZES).anyMatch(size -> size == pageSize);
+        return pageSizeAvailable ? pageSize : DEFAULT_PAGE_SIZE;
     }
 
     public class PageItem {
