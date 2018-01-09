@@ -29,7 +29,13 @@
     </div>
     <br/><br/>
     <div th:class="text-center">
-        <a th:href="@{/location}" th:text="#{href.backToLocationsPage}">Back to location page</a>
+        <nav>
+            <ul th:class="pager">
+                <li>
+                    <a th:href="@{/location}" th:text="#{href.backToLocationsPage}">Back to location page</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>
 <div th:replace="fragments/common :: footer">

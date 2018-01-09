@@ -64,8 +64,14 @@
                     </div>
                 </div>
                 <br/>
-                <div class="text-center">
-                    <a th:href="@{/profile/edit}" th:text="#{profilePage.editProfile}">Edit profile</a>
+                <div th:class="text-center">
+                    <nav>
+                        <ul th:class="pager">
+                            <li>
+                                <a th:href="@{/profile/edit}" th:text="#{profilePage.editProfile}">Edit profile</a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
