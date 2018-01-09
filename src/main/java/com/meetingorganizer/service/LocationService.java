@@ -1,8 +1,7 @@
 package com.meetingorganizer.service;
 
 import com.meetingorganizer.domain.Location;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface LocationService {
 
@@ -10,7 +9,7 @@ public interface LocationService {
 
     Location saveAndFlush(Location location);
 
-    List<Location> findAll();
+    Page<Location> findAll(int page, int pageSize);
 
     Location findOneById(Long id);
 }

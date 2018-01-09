@@ -4,9 +4,9 @@ import com.meetingorganizer.domain.Location;
 import com.meetingorganizer.repository.LocationRepository;
 import com.meetingorganizer.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class LocationManagementService implements LocationService {
@@ -29,8 +29,8 @@ public class LocationManagementService implements LocationService {
     }
 
     @Override
-    public List<Location> findAll() {
-        return locationRepository.findAll();
+    public Page<Location> findAll(int page, int pageSize) {
+        return locationRepository.findAll(new PageRequest(page - 1, pageSize));
     }
 
     @Override

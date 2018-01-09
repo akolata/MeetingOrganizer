@@ -22,6 +22,9 @@
         <p>Location options</p>
     </div>
     <div class="">
+        <div th:replace="fragments/paginationBar :: paginationBar">
+            <p>Pagination bar</p>
+        </div>
         <table class="table table-bordered">
             <tr>
                 <th th:text="#{locationPage.location.name}">Name</th>

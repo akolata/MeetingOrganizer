@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+    <div th:fragment="paginationBar">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <!-- Go back to the first page-->
+                <li th:class="${page.firstPage}? 'disabled' : ''">
+                    <span th:if="${page.firstPage}" aria-hidden="true">&laquo;</span>
+                    <a th:if="${not page.firstPage}"
+                       th:href="@{${page.viewUrl}(page=1,pageSize=${page.size})}">&laquo;</a>
+                </li>
+
+                <!-- Display page numbers -->
+                <li th:each="item : ${page.pageItems}"
+                    th:class="${item.current}? 'active' : ''">
+
+                    <span th:if="${item.current}" th:text="${item.number}">1</span>
+                    <a th:if="${not item.current}"
+                       th:href="@{${page.viewUrl}(page=${item.number},pageSize=${page.size})}">
+                        <span th:text="${item.number}">1</span></a>
+                </li>
+
+                <!-- Go to last page-->
+                <li th:class="${page.lastPage}? 'disabled' : ''">
+                    <span th:if="${page.lastPage}">&raquo;</span>
+                    <a th:if="${not page.lastPage}"
+                       th:href="@{${page.viewUrl}(page=${page.totalPages},pageSize=${page.size})}">&raquo;</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</body>
+</html>
