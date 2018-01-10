@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class LocationManagementService implements LocationService {
 
+    private int latestPageSize = PageWrapper.DEFAULT_PAGE_SIZE;
     private LocationRepository locationRepository;
 
     @Autowired
@@ -31,6 +32,12 @@ public class LocationManagementService implements LocationService {
 
     @Override
     public Page<Location> findAll(int page, int pageSize) {
+
+        if(latestPageSize != pageSize) {
+            page = 1;
+        }
+
+        latestPageSize = pageSize;
         return locationRepository.findAll(new PageRequest(
                 PageWrapper.adjustPageNumber(page) - 1,
                 PageWrapper.adjustPageSize(pageSize)));
