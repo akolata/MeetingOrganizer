@@ -37,9 +37,6 @@
                 <td>
                     <a th:href="@{/location/{id}/details(id=${row.id})}"
                        th:text="#{locationPage.location.action.details}">Details</a>
-                    <span>  </span>
-                    <a th:href="@{/meetings/new(locationId=${row.id})}"
-                       th:text="#{locationPage.location.action.choose}">Choose</a>
                 </td>
             </tr>
         </table>

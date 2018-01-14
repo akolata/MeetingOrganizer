@@ -29,6 +29,8 @@
     </div>
     <br/><br/>
     <div th:class="text-center">
+        <a class="btn btn-primary" th:text="#{locationPage.location.action.organize}"
+           th:href="@{/meetings/new(locationId=${location.id})}"  role="button">Organize a meeting here</a>
         <nav>
             <ul th:class="pager">
                 <li>
