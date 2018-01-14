@@ -22,6 +22,8 @@ public interface UserService {
 
     User findOne(Long id);
 
+    User findOneByEmail(String email);
+
     void createVerificationToken(User user, String token);
 
     void updateUserProfile(User user, ProfileInfoDto dto);

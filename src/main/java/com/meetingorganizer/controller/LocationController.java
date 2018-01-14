@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/location")
@@ -56,21 +57,26 @@ public class LocationController {
 
     @PostMapping(value = "/add")
     public String processAddLocationForm(@Valid @ModelAttribute(name = "dto") AddLocationDto dto,
-                                         BindingResult bindingResult) {
+                                         BindingResult bindingResult, Principal principal) {
 
         if (bindingResult.hasErrors()) {
             return ADD_LOCATION_PAGE;
         }
 
         Location location = new Location(dto);
-        locationService.saveAndFlush(location);
+        locationService.saveAndFlush(location, principal.getName());
 
         return LOCATIONS_PAGE;
     }
 
     @GetMapping(value = "/{id}/details")
-    public String displayLocationDetailsPage(Model model, @PathVariable Long id) {
-        model.addAttribute("location", locationService.findOneById(id));
+    public String displayLocationDetailsPage(Model model, @PathVariable Long id, Principal principal) {
+        Location location = locationService.findOneById(id);
+
+        if (location != null) {
+            model.addAttribute("location", location);
+            model.addAttribute("canEdit", locationService.canEditLocation(location, principal.getName()));
+        }
 
         return LOCATION_DETAILS_PAGE;
     }

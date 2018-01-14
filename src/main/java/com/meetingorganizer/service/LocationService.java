@@ -7,9 +7,11 @@ public interface LocationService {
 
     boolean existsByNameIgnoreCase(String name);
 
-    Location saveAndFlush(Location location);
+    Location saveAndFlush(Location location, String creatorEmail);
 
     Page<Location> findAll(int page, int pageSize);
 
     Location findOneById(Long id);
+
+    boolean canEditLocation(Location location, String userEmail);
 }

@@ -45,6 +45,11 @@ public class Location {
     @Setter
     private List<Reservation> reservations;
 
+    @JoinColumn(name = "CREATED_BY", updatable = false)
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},fetch = FetchType.LAZY)
+    @Getter @Setter
+    private User createdBy;
+
     public Location() {
         this.reservations = new LinkedList<>();
     }
@@ -78,6 +83,7 @@ public class Location {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", maxMembers=" + maxMembers +
+                ", createdBy=" + createdBy +
                 '}';
     }
 }
