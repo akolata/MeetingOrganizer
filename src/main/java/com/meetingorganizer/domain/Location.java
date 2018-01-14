@@ -1,6 +1,6 @@
 package com.meetingorganizer.domain;
 
-import com.meetingorganizer.dto.location.AddLocationDto;
+import com.meetingorganizer.dto.location.LocationDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -54,8 +54,15 @@ public class Location {
         this.reservations = new LinkedList<>();
     }
 
-    public Location(AddLocationDto dto) {
+    public Location(LocationDto dto) {
         this();
+        this.name = dto.getName();
+        this.description = dto.getDescription();
+        this.maxMembers = dto.getMaxMembers();
+    }
+
+    public void updateFromDto(LocationDto dto) {
+        //TODO: create Location <-> LocationDto converter
         this.name = dto.getName();
         this.description = dto.getDescription();
         this.maxMembers = dto.getMaxMembers();

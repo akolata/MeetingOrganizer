@@ -1,15 +1,19 @@
 package com.meetingorganizer.dto.location;
 
-import com.meetingorganizer.validation.UniqueLocationName;
+import com.meetingorganizer.domain.Location;
 import org.hibernate.validator.constraints.NotBlank;
 
-public class AddLocationDto extends LocationDto {
+public class EditLocationDto extends LocationDto {
 
     @NotBlank
-    @UniqueLocationName
     private String name;
 
-    public AddLocationDto() {
+    public EditLocationDto() {
+    }
+
+    public EditLocationDto(Location location) {
+        super(location);
+        this.name = location.getName();
     }
 
     @Override
@@ -24,9 +28,8 @@ public class AddLocationDto extends LocationDto {
 
     @Override
     public String toString() {
-        return "AddLocationDto{" +
+        return "EditLocationDto{" +
                 "name='" + name + '\'' +
                 "} " + super.toString();
     }
-
 }

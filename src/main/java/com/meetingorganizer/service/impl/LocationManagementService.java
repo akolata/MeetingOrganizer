@@ -31,8 +31,13 @@ public class LocationManagementService implements LocationService {
     }
 
     @Override
-    public Location saveAndFlush(Location location, String creatorEmail) {
+    public Location addNewLocation(Location location, String creatorEmail) {
         location.setCreatedBy(userService.findOneByEmail(creatorEmail));
+        return locationRepository.saveAndFlush(location);
+    }
+
+    @Override
+    public Location saveAndFlush(Location location) {
         return locationRepository.saveAndFlush(location);
     }
 

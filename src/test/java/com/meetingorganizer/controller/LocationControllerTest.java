@@ -78,7 +78,7 @@ public class LocationControllerTest {
         mvc.perform(get(ADD_LOCATION_URL)
                 .with(user(TestHelper.sampleUser()))
                 .accept(MediaType.TEXT_HTML_VALUE))
-                .andExpect(view().name(LocationController.ADD_LOCATION_PAGE))
+                .andExpect(view().name(LocationController.LOCATION_FORM_PAGE))
                 .andExpect(status().isOk());
     }
 

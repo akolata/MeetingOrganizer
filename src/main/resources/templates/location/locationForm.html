@@ -59,7 +59,8 @@
 
         <div class="form-group">
             <div class="col-sm-offset-5 col-sm-2">
-                <button type="submit" class="btn btn-default btn-block" th:text="#{button.add}">Add</button>
+                <button th:if="${mode} == 'add'" type="submit" class="btn btn-default btn-block" th:text="#{button.add}">Add</button>
+                <button th:if="${mode} == 'edit'" type="submit" class="btn btn-default btn-block" th:text="#{button.saveChanges}">Save changes</button>
             </div>
         </div>
     </form>

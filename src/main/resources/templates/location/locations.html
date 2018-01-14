@@ -21,6 +21,9 @@
     <div th:replace="location/locationOptions :: locationOptionsThumbnails">
         <p>Location options</p>
     </div>
+    <div th:if="${displayLocationNotFound}">
+        <div th:replace="location/locationOptions :: locationNotFound"></div>
+    </div>
 </div>
 <div th:replace="fragments/common :: footer">
     <p>Footer</p>
