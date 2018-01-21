@@ -7,6 +7,7 @@ import com.meetingorganizer.domain.User;
 import com.meetingorganizer.dto.profile.ProfileInfoDto;
 import com.meetingorganizer.dto.profile.ProfileMailDto;
 import com.meetingorganizer.dto.profile.ProfilePasswordDto;
+import com.meetingorganizer.helpers.TestHelper;
 import com.meetingorganizer.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
@@ -87,7 +88,7 @@ public class ProfileControllerTest {
         mvc.perform(
                 fileUpload(PROFILE_URL).file(file)
                         .with(csrf())
-                        .with(user(sampleUser()))
+                        .with(user(TestHelper.sampleUser()))
                         .accept(MediaType.MULTIPART_FORM_DATA_VALUE))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -103,7 +104,7 @@ public class ProfileControllerTest {
         mvc.perform(
                 fileUpload(PROFILE_URL).file(file)
                         .with(csrf())
-                        .with(user(sampleUser()))
+                        .with(user(TestHelper.sampleUser()))
                         .accept(MediaType.MULTIPART_FORM_DATA_VALUE))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/profile"))
@@ -120,7 +121,7 @@ public class ProfileControllerTest {
         mvc.perform(
                 fileUpload(PROFILE_URL).file(file)
                         .with(csrf())
-                        .with(user(sampleUser()))
+                        .with(user(TestHelper.sampleUser()))
                         .accept(MediaType.MULTIPART_FORM_DATA_VALUE))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/profile"))
@@ -147,7 +148,7 @@ public class ProfileControllerTest {
 
         mvc.perform(post(EDIT_PROFILE_URL)
                 .with(csrf())
-                .with(user(sampleUser()))
+                .with(user(TestHelper.sampleUser()))
                 .accept(MediaType.TEXT_HTML)
                 .param("editInfo", "editInfo")
                 .param("firstName", "John")
@@ -166,7 +167,7 @@ public class ProfileControllerTest {
 
         mvc.perform(post(EDIT_PROFILE_URL)
                 .with(csrf())
-                .with(user(sampleUser()))
+                .with(user(TestHelper.sampleUser()))
                 .accept(MediaType.TEXT_HTML)
                 .param("editInfo", "editInfo")
                 .param("firstName", "")
@@ -186,7 +187,7 @@ public class ProfileControllerTest {
 
         mvc.perform(post(EDIT_PROFILE_URL)
                 .with(csrf())
-                .with(user(sampleUser()))
+                .with(user(TestHelper.sampleUser()))
                 .accept(MediaType.TEXT_HTML)
                 .param("editMail", "")
                 .param("email", "new@domain.com")
@@ -205,7 +206,7 @@ public class ProfileControllerTest {
 
         mvc.perform(post(EDIT_PROFILE_URL)
                 .with(csrf())
-                .with(user(sampleUser()))
+                .with(user(TestHelper.sampleUser()))
                 .accept(MediaType.TEXT_HTML)
                 .param("editMail", "")
                 .param("email", "new@domain.com")
@@ -224,7 +225,7 @@ public class ProfileControllerTest {
 
         mvc.perform(post(EDIT_PROFILE_URL)
                 .with(csrf())
-                .with(user(sampleUser()))
+                .with(user(TestHelper.sampleUser()))
                 .accept(MediaType.TEXT_HTML)
                 .param("editMail", "")
                 .param("email", "new@domain.com")
@@ -242,7 +243,7 @@ public class ProfileControllerTest {
 
         mvc.perform(post(EDIT_PROFILE_URL)
                 .with(csrf())
-                .with(user(sampleUser()))
+                .with(user(TestHelper.sampleUser()))
                 .accept(MediaType.TEXT_HTML)
                 .param("editPassword", "")
                 .param("oldPassword", "")
@@ -262,7 +263,7 @@ public class ProfileControllerTest {
 
         mvc.perform(post(EDIT_PROFILE_URL)
                 .with(csrf())
-                .with(user(sampleUser()))
+                .with(user(TestHelper.sampleUser()))
                 .accept(MediaType.TEXT_HTML)
                 .param("editPassword", "")
                 .param("oldPassword", "abcD123@")
@@ -273,15 +274,5 @@ public class ProfileControllerTest {
                 .andExpect(view().name(ProfileController.EDIT_PROFILE_PAGE));
 
         verify(userService, times(0)).updateUserProfile(any(User.class), any(ProfilePasswordDto.class));
-    }
-
-    private User sampleUser() {
-        User user = new User();
-        user.setFirstName("first");
-        user.setLastName("last");
-        user.setEmail("mail@domain.com");
-        user.setPassword("pass");
-
-        return user;
     }
 }

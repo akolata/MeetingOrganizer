@@ -176,9 +176,14 @@
         </form>
         <!-- Profile's password form-->
 
-
-        <div class="col-xs-12 col-sm-offset-2">
-            <a th:href="@{/profile}" th:text="#{href.backToProfilePage}">Back to profile</a>
+        <div th:class="text-center">
+            <nav>
+                <ul th:class="pager">
+                    <li th:class="previous">
+                        <a th:href="@{/profile}" th:text="#{href.backToProfilePage}">Back to profile</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
     <div th:replace="fragments/common :: footer">

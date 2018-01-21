@@ -1,5 +1,6 @@
 package com.meetingorganizer.domain;
 
+import com.meetingorganizer.dto.location.LocationDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -44,8 +45,27 @@ public class Location {
     @Setter
     private List<Reservation> reservations;
 
+    @JoinColumn(name = "CREATED_BY", updatable = false)
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},fetch = FetchType.LAZY)
+    @Getter @Setter
+    private User createdBy;
+
     public Location() {
         this.reservations = new LinkedList<>();
+    }
+
+    public Location(LocationDto dto) {
+        this();
+        this.name = dto.getName();
+        this.description = dto.getDescription();
+        this.maxMembers = dto.getMaxMembers();
+    }
+
+    public void updateFromDto(LocationDto dto) {
+        //TODO: create Location <-> LocationDto converter
+        this.name = dto.getName();
+        this.description = dto.getDescription();
+        this.maxMembers = dto.getMaxMembers();
     }
 
     @Override
@@ -70,6 +90,7 @@ public class Location {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", maxMembers=" + maxMembers +
+                ", createdBy=" + createdBy +
                 '}';
     }
 }

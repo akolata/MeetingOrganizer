@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html ;charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title th:text="#{locationPage.addLocation.title}">Add place</title>
+    <link href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css"
+          rel="stylesheet"
+          type="text/css"/>
+    <link th:href="@{/css/style.css}"
+          href="../../static/css/style.css"
+          rel="stylesheet"
+          type="text/css"/>
+</head>
+<body>
+<div th:replace="fragments/common :: navbar">
+    <p>Navbar</p>
+</div>
+<div class="container">
+    <div th:replace="location/locationOptions :: locationOptionsThumbnails">
+        <p>Location options</p>
+    </div>
+    <div th:replace="location/locationOptions :: locationDetails">
+        <p>Location details</p>
+    </div>
+    <br/><br/>
+    <div th:class="text-center">
+        <a th:if="${canEdit}" class="btn btn-primary" th:text="#{locationPage.location.action.edit}"
+           th:href="@{/location/{locationId}/edit(locationId=${location.id})}"  role="button">Edit location details</a>
+        <a class="btn btn-primary" th:text="#{locationPage.location.action.organize}"
+           th:href="@{/meetings/new(locationId=${location.id})}"  role="button">Organize a meeting here</a>
+        <nav>
+            <ul th:class="pager">
+                <li>
+                    <a th:href="@{/location/browse}" th:text="#{href.backToLocationsPage}">Back to location page</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<div th:replace="fragments/common :: footer">
+    <p>Footer</p>
+</div>
+<div th:replace="fragments/common :: scripts">
+    <p>Scripts</p>
+</div>
+<script th:src="@{/js/location.js}" src="../resources/static/location.js"></script>
+</body>
+</html>

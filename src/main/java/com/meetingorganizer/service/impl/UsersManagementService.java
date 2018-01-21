@@ -94,9 +94,9 @@ public class UsersManagementService implements UserService {
 
     @Override
     public boolean passwordMatchesStoredPassword(String password, User user) {
-        if(passwordEncoder.matches(password, user.getPassword())){
+        if (passwordEncoder.matches(password, user.getPassword())) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -120,6 +120,11 @@ public class UsersManagementService implements UserService {
     public void updateUserProfile(User user, ProfilePasswordDto dto) {
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         saveUserAndFlush(user);
+    }
+
+    @Override
+    public User findOneByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
 }

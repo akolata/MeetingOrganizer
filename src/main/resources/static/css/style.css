@@ -14,6 +14,13 @@ img {
     margin-top: 50px;
 }
 
+#page-size-select {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+}
+
 @media screen and (max-width: 768px) {
     img {
         margin-left: 5vw;

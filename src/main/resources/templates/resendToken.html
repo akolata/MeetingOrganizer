@@ -51,7 +51,13 @@
             </div>
         </form>
         <div class="text-center">
-            <a th:href="@{/login}" th:text="#{href.backToLoginPage}">Back to login page</a>
+            <nav>
+                <ul th:class="pager">
+                    <li>
+                        <a th:href="@{/login}" th:text="#{href.backToLoginPage}">Back to login page</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
     <div th:replace="fragments/common :: scripts">
