@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8"/>
     <meta http-equiv="Content-Type" content="text/html ;charset=UTF-8"/>
@@ -12,36 +12,39 @@
           href="../../static/css/style.css"
           rel="stylesheet"
           type="text/css"/>
+    <link th:href="@{/css/dataTables.bootstrap.min.css}"
+          href="../../static/css/dataTables.bootstrap.min.css"
+          rel="stylesheet"
+          type="text/css"/>
 </head>
 <body>
 <div th:replace="fragments/common :: navbar">
     <p>Navbar</p>
 </div>
-<div class="container">
-    <div th:replace="location/locationOptions :: locationOptionsThumbnails">
-        <p>Location options</p>
-    </div>
-    <div class="">
-        <div th:replace="fragments/paginationBar :: paginationBar">
-            <p>Pagination bar</p>
+    <div class="container">
+        <div th:replace="location/locationOptions :: locationOptionsThumbnails">
+            <p>Location options</p>
         </div>
-        <table class="table table-bordered">
-            <tr>
-                <th th:text="#{locationPage.location.name}">Name</th>
-                <th th:text="#{locationPage.location.maxMembers}">Max members</th>
-                <th th:text="#{locationPage.location.action.list}">Actions</th>
-            </tr>
-            <tr th:each="row: ${locations}">
-                <td th:text="${row.name}">name</td>
-                <td th:text="${row.maxMembers}">members</td>
-                <td>
-                    <a th:href="@{/location/{id}/details(id=${row.id})}"
-                       th:text="#{locationPage.location.action.details}">Details</a>
-                </td>
-            </tr>
+        <table id="locationTable" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th th:text="#{locationPage.location.name}">Name</th>
+                    <th th:text="#{locationPage.location.maxMembers}">Max members</th>
+                    <th th:text="#{locationPage.location.action.list}">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="row: ${locations}">
+                    <td th:text="${row.name}">name</td>
+                    <td th:text="${row.maxMembers}">members</td>
+                    <td>
+                        <a th:href="@{/location/{id}/details(id=${row.id})}"
+                           th:text="#{locationPage.location.action.details}">Details</a>
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
-</div>
 <div th:replace="fragments/common :: footer">
     <p>Footer</p>
 </div>

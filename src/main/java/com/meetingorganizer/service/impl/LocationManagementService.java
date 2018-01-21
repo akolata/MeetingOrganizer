@@ -5,17 +5,15 @@ import com.meetingorganizer.domain.User;
 import com.meetingorganizer.repository.LocationRepository;
 import com.meetingorganizer.service.LocationService;
 import com.meetingorganizer.service.UserService;
-import com.meetingorganizer.utils.PageWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class LocationManagementService implements LocationService {
 
-    private int latestPageSize = PageWrapper.DEFAULT_PAGE_SIZE;
     private LocationRepository locationRepository;
     private UserService userService;
 
@@ -42,16 +40,8 @@ public class LocationManagementService implements LocationService {
     }
 
     @Override
-    public Page<Location> findAll(int page, int pageSize) {
-
-        if (latestPageSize != pageSize) {
-            page = 1;
-        }
-
-        latestPageSize = pageSize;
-        return locationRepository.findAll(new PageRequest(
-                PageWrapper.adjustPageNumber(page) - 1,
-                PageWrapper.adjustPageSize(pageSize)));
+    public List<Location> findAll() {
+        return locationRepository.findAll();
     }
 
     @Override

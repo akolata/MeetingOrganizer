@@ -4,9 +4,7 @@ import com.meetingorganizer.domain.Location;
 import com.meetingorganizer.dto.location.AddLocationDto;
 import com.meetingorganizer.dto.location.EditLocationDto;
 import com.meetingorganizer.service.LocationService;
-import com.meetingorganizer.utils.PageWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/location")
@@ -38,15 +37,10 @@ public class LocationController {
     }
 
     @GetMapping(value = "/browse")
-    public String displayBrowseLocationsPage(@RequestParam(required = false, defaultValue = "1") int page,
-                                             @RequestParam(required = false, defaultValue = "10") int pageSize,
-                                             Model model) {
+    public String displayBrowseLocationsPage(Model model) {
 
-        Page<Location> locationPage = locationService.findAll(page, pageSize);
-        PageWrapper<Location> locationPageWrapper = new PageWrapper<>(locationPage, "/location/browse");
-
-        model.addAttribute("locations", locationPage.getContent());
-        model.addAttribute("page", locationPageWrapper);
+        List<Location> locations = locationService.findAll();
+        model.addAttribute("locations", locations);
 
         return BROWSE_LOCATIONS_PAGE;
     }
