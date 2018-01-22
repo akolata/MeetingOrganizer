@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 /**
  * Table with verification tokens used for login registration
+ *
  * @author Aleksander
  */
 @Entity
@@ -25,14 +26,15 @@ public class VerificationToken {
     @Column(name = "TOKEN")
     private String token;
 
-    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(nullable = false, name = "USER_ID")
     private User user;
 
     @Column(name = "EXPIRATION_TIME")
     private LocalDateTime expirationTime;
 
-    public VerificationToken(){}
+    public VerificationToken() {
+    }
 
     public VerificationToken(String token, User user) {
         this.token = token;
@@ -40,17 +42,17 @@ public class VerificationToken {
         this.expirationTime = calculateExpirationDate(EXPIRATION_TIME_IN_HOURS);
     }
 
-    private LocalDateTime calculateExpirationDate(int expirationTimeInHours){
+    private LocalDateTime calculateExpirationDate(int expirationTimeInHours) {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime expirationTime =  now.plusHours(expirationTimeInHours);
+        LocalDateTime expirationTime = now.plusHours(expirationTimeInHours);
         return expirationTime;
     }
 
-    public boolean isTokenExpired(){
+    public boolean isTokenExpired() {
         return LocalDateTime.now().isAfter(this.expirationTime);
     }
 
-    public void updateExpirationTime(){
+    public void updateExpirationTime() {
         this.expirationTime = calculateExpirationDate(EXPIRATION_TIME_IN_HOURS);
     }
 

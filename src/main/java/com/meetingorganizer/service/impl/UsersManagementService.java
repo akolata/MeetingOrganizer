@@ -7,15 +7,17 @@ import com.meetingorganizer.dto.RegistrationFormDto;
 import com.meetingorganizer.dto.profile.ProfileInfoDto;
 import com.meetingorganizer.dto.profile.ProfileMailDto;
 import com.meetingorganizer.dto.profile.ProfilePasswordDto;
+import com.meetingorganizer.repository.AuthorityRepository;
 import com.meetingorganizer.repository.UserRepository;
-import com.meetingorganizer.repository.VerificationTokenRepository;
 import com.meetingorganizer.service.AuthorityService;
+import com.meetingorganizer.service.TokenService;
 import com.meetingorganizer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -27,17 +29,19 @@ public class UsersManagementService implements UserService {
 
     private UserRepository userRepository;
     private AuthorityService authorityService;
-    private VerificationTokenRepository tokenRepository;
+    private AuthorityRepository authorityRepository;
+    private TokenService tokenService;
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     public UsersManagementService(UserRepository userRepository,
                                   AuthorityService authorityService,
-                                  VerificationTokenRepository tokenRepository,
-                                  PasswordEncoder passwordEncoder) {
+                                  AuthorityRepository authorityRepository,
+                                  TokenService tokenService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.authorityService = authorityService;
-        this.tokenRepository = tokenRepository;
+        this.authorityRepository = authorityRepository;
+        this.tokenService = tokenService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -60,9 +64,26 @@ public class UsersManagementService implements UserService {
     }
 
     @Override
+    public void rollbackUserRegistration(User userToDelete) {
+        VerificationToken tokenToDelete = tokenService.findByUser(userToDelete);
+
+        List<Authority> allAuthorities = authorityRepository.findAll();
+        for(Authority auth : allAuthorities) {
+            for(User userWithAuthority : auth.getUsers()) {
+                if(userWithAuthority.getId() == userToDelete.getId()) {
+                    auth.getUsers().remove(userWithAuthority);
+                }
+            }
+        }
+        authorityRepository.save(allAuthorities);
+        tokenService.delete(tokenToDelete);
+        userRepository.delete(userToDelete);
+    }
+
+    @Override
     public void createVerificationToken(User user, String token) {
         VerificationToken verificationToken = new VerificationToken(token, user);
-        tokenRepository.saveAndFlush(verificationToken);
+        tokenService.saveAndFlush(verificationToken);
     }
 
     @Override
@@ -72,7 +93,7 @@ public class UsersManagementService implements UserService {
 
     @Override
     public VerificationToken getVerificationToken(String token) {
-        return tokenRepository.findByToken(token);
+        return tokenService.findByToken(token);
     }
 
     @Override
@@ -83,12 +104,12 @@ public class UsersManagementService implements UserService {
     @Override
     public VerificationToken generateNewVerificationToken(String email) {
         User user = userRepository.findByEmail(email);
-        VerificationToken actualToken = tokenRepository.findByUser(user);
+        VerificationToken actualToken = tokenService.findByUser(user);
 
         actualToken.setToken(UUID.randomUUID().toString());
         actualToken.updateExpirationTime();
 
-        actualToken = tokenRepository.saveAndFlush(actualToken);
+        actualToken = tokenService.saveAndFlush(actualToken);
         return actualToken;
     }
 

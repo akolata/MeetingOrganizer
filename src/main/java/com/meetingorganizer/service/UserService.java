@@ -18,6 +18,8 @@ public interface UserService {
 
     User registerUser(RegistrationFormDto dto);
 
+    void rollbackUserRegistration(User user);
+
     User saveUserAndFlush(User user);
 
     User findOne(Long id);

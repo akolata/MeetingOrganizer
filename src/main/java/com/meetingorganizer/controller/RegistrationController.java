@@ -20,20 +20,20 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.UnknownHostException;
 
 /**
  * Controller for registration page
+ *
  * @author Aleksander
  */
 @Controller
 @RequestMapping("/register")
 public class RegistrationController {
 
-    public final static String  REGISTRATION_PAGE = "register",
-                                REDIRECT_TO_LOGIN_PAGE = "redirect:/login",
-                                REGISTRATION_CONFIRM_ENDPOINT = "/confirm",
-                                RESEND_TOKEN_PAGE = "resendToken";
+    public final static String REGISTRATION_PAGE = "register",
+            REDIRECT_TO_LOGIN_PAGE = "redirect:/login",
+            REGISTRATION_CONFIRM_ENDPOINT = "/confirm",
+            RESEND_TOKEN_PAGE = "resendToken";
 
     private UserService userService;
     private MailService mailService;
@@ -51,19 +51,26 @@ public class RegistrationController {
         this.eventPublisher = eventPublisher;
     }
 
+    /**
+     * Display registration page and pass dto object to view
+     *
+     * @param model view model
+     * @return name of the registration page
+     */
     @GetMapping
-    public String displayRegistrationPage(Model model){
+    public String displayRegistrationPage(Model model) {
         model.addAttribute("dto", new RegistrationFormDto());
         return REGISTRATION_PAGE;
     }
 
     /**
      * Register new user if form has no errors and send email with authorization token
-     * @param dto form's dto
-     * @param model
-     * @param bindingResult
-     * @param redirectAttributes
-     * @return
+     *
+     * @param dto                form's dto
+     * @param model              view model
+     * @param bindingResult      the result of a form validation
+     * @param redirectAttributes attributes used only after redirection
+     * @return name of the registration page if there were any error or login page after successful registration
      */
     @PostMapping
     public String processRegistrationForm(@Valid @ModelAttribute(name = "dto") RegistrationFormDto dto,
@@ -71,10 +78,10 @@ public class RegistrationController {
                                           Model model,
                                           RedirectAttributes redirectAttributes) {
 
+        // Check for global errors - class level custom annotations
         if (bindingResult.hasErrors()) {
             if (bindingResult.hasGlobalErrors()) {
-                model.addAllAttributes(
-                        errorsUtils.errorMessagesForClassLevelValidations(bindingResult.getGlobalErrors()));
+                model.addAllAttributes(errorsUtils.errorMessagesForClassLevelValidations(bindingResult.getGlobalErrors()));
             }
 
             return REGISTRATION_PAGE;
@@ -88,12 +95,13 @@ public class RegistrationController {
         User registeredUser = userService.registerUser(dto);
         String tokenConfirmationUrl = ServletUriComponentsBuilder.fromCurrentRequestUri().toUriString();
 
-        try{
+        try {
             eventPublisher.publishEvent(new RegistrationCompleteEvent(registeredUser, tokenConfirmationUrl,
                     LocaleContextHolder.getLocale()));
 
             redirectAttributes.addFlashAttribute("registrationSuccessful", Boolean.TRUE);
-        }catch (Exception e){
+        } catch (Exception e) {
+            userService.rollbackUserRegistration(registeredUser);
             model.addAttribute("emailSendException", Boolean.TRUE);
             return REGISTRATION_PAGE;
         }
@@ -102,22 +110,23 @@ public class RegistrationController {
     }
 
     /**
-     * Enable user's account is the token is valid and non-expired
-     * @param token token from user's email
+     * Enable user's account if the token is valid and non-expired
+     *
+     * @param token              token from user's email
      * @param redirectAttributes
-     * @return
+     * @return redirect to login page and show a message about operation result
      */
     @GetMapping("/confirm")
-    public String confirmRegistration(@RequestParam("token") String token, RedirectAttributes redirectAttributes){
+    public String confirmRegistration(@RequestParam("token") String token, RedirectAttributes redirectAttributes) {
 
         VerificationToken verificationToken = userService.getVerificationToken(token);
 
-        if(verificationToken == null){
+        if (verificationToken == null) {
             redirectAttributes.addFlashAttribute("tokenNotFound", Boolean.TRUE);
             return REDIRECT_TO_LOGIN_PAGE;
         }
 
-        if(verificationToken.isTokenExpired()){
+        if (verificationToken.isTokenExpired()) {
             redirectAttributes.addFlashAttribute("tokenExpired", Boolean.TRUE);
             return REDIRECT_TO_LOGIN_PAGE;
         }
@@ -131,32 +140,38 @@ public class RegistrationController {
         return REDIRECT_TO_LOGIN_PAGE;
     }
 
+    /**
+     * Display resend token page and pass dto to the view
+     *
+     * @param model view model
+     * @return name of the resend token page
+     */
     @GetMapping("/resendToken")
-    public String displayResentTokenPage(Model model){
+    public String displayResendTokenPage(Model model) {
         model.addAttribute("dto", new ResendTokenDto());
         return RESEND_TOKEN_PAGE;
     }
 
     /**
      * For already registered user generate and send new token
-     * @param dto
-     * @param model
-     * @param bindingResult
+     *
+     * @param dto                dto connected with form on the page
+     * @param bindingResult      the validation result
+     * @param model              view model
      * @param redirectAttributes
-     * @return
-     * @throws UnknownHostException
+     * @return resend token page name in case of any error or login page if form was processed successfully
      */
     @PostMapping("/resendToken")
     public String processResentTokenForm(@ModelAttribute(name = "dto") @Valid ResendTokenDto dto,
                                          BindingResult bindingResult,
                                          Model model,
-                                         RedirectAttributes redirectAttributes) throws UnknownHostException {
+                                         RedirectAttributes redirectAttributes) {
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return RESEND_TOKEN_PAGE;
         }
 
-        if(!userService.isEmailAlreadyTaken(dto.getEmail())){
+        if (!userService.isEmailAlreadyTaken(dto.getEmail())) {
             model.addAttribute("emailNotRegistered", Boolean.TRUE);
             return RESEND_TOKEN_PAGE;
         }
@@ -171,10 +186,10 @@ public class RegistrationController {
         SimpleMailMessage mailMessage = mailService.prepareRegistrationMailMessage(tokenConfirmationUrl,
                 generatedToken.getUser().getEmail(), LocaleContextHolder.getLocale());
 
-        try{
+        try {
             mailService.sendEmail(mailMessage);
             redirectAttributes.addFlashAttribute("tokenResend", Boolean.TRUE);
-        }catch (Exception e){
+        } catch (Exception e) {
             model.addAttribute("emailSendException", Boolean.TRUE);
             return RESEND_TOKEN_PAGE;
         }
