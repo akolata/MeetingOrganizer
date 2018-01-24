@@ -90,6 +90,7 @@ public class LocationController {
         if (location != null) {
             model.addAttribute("dto", new EditLocationDto(location));
             model.addAttribute("mode", "edit"); // TODO: change modes to enums
+            model.addAttribute("locationId", id);
         } else {
             redirectAttributes.addFlashAttribute("displayLocationNotFound", Boolean.TRUE);
             return "redirect:/location";
