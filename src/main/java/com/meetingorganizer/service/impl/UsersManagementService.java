@@ -47,7 +47,7 @@ public class UsersManagementService implements UserService {
 
     @Override
     public boolean isEmailAlreadyTaken(String email) {
-        Long usersWithEqualEmail = userRepository.countAllByEmail(email);
+        Long usersWithEqualEmail = userRepository.countAllByEmailIgnoreCase(email);
         return usersWithEqualEmail > 0;
     }
 
@@ -68,9 +68,9 @@ public class UsersManagementService implements UserService {
         VerificationToken tokenToDelete = tokenService.findByUser(userToDelete);
 
         List<Authority> allAuthorities = authorityRepository.findAll();
-        for(Authority auth : allAuthorities) {
-            for(User userWithAuthority : auth.getUsers()) {
-                if(userWithAuthority.getId() == userToDelete.getId()) {
+        for (Authority auth : allAuthorities) {
+            for (User userWithAuthority : auth.getUsers()) {
+                if (userWithAuthority.getId().equals(userToDelete.getId())) {
                     auth.getUsers().remove(userWithAuthority);
                 }
             }

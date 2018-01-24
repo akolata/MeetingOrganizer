@@ -17,4 +17,6 @@ public interface LocationService {
     Location findOneById(Long id);
 
     boolean canEditLocation(Location location, String userEmail);
+
+    boolean isLocationNameAvailable(String name, Location currentLocation);
 }

@@ -55,7 +55,7 @@ public class UsersManagementServiceTest {
     public void isEmailAlreadyTaken_mailNotInRepository_ShouldReturnFalse(){
         String mail = "user@mail.com";
 
-        when(userRepository.countAllByEmail(mail)).thenReturn(0L);
+        when(userRepository.countAllByEmailIgnoreCase(mail)).thenReturn(0L);
         boolean isMailTaken = userService.isEmailAlreadyTaken(mail);
 
         assertFalse(isMailTaken);
@@ -65,7 +65,7 @@ public class UsersManagementServiceTest {
     public void isEmailAlreadyTaken_mailInRepository_ShouldReturnTrue() {
         String mail = "user@mail.com";
 
-        when(userRepository.countAllByEmail(mail)).thenReturn(1L);
+        when(userRepository.countAllByEmailIgnoreCase(mail)).thenReturn(1L);
         boolean isMailTaken = userService.isEmailAlreadyTaken(mail);
 
         assertTrue(isMailTaken);

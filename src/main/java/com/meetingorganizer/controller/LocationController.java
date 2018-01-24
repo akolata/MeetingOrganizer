@@ -107,6 +107,12 @@ public class LocationController {
 
         Location location = locationService.findOneById(id);
 
+        if(!locationService.isLocationNameAvailable(dto.getName(), location)) {
+            model.addAttribute("mode", "edit");
+            model.addAttribute("NAME_TAKEN", Boolean.TRUE);
+            return LOCATION_FORM_PAGE;
+        }
+
         if (location != null) {
             location.updateFromDto(dto);
             locationService.saveAndFlush(location);

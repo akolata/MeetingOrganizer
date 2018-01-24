@@ -35,7 +35,7 @@ public class UserRepositoryTest {
 
         testEntityManager.persistAndFlush(user);
 
-        Long usersWithSameEmail = userRepository.countAllByEmail(searchedMail);
+        Long usersWithSameEmail = userRepository.countAllByEmailIgnoreCase(searchedMail);
 
         assertEquals(new Long(0), usersWithSameEmail);
     }
@@ -52,7 +52,7 @@ public class UserRepositoryTest {
         testEntityManager.persistAndFlush(user);
 
 
-        Long usersWithSameEmail = userRepository.countAllByEmail(userMail);
+        Long usersWithSameEmail = userRepository.countAllByEmailIgnoreCase(userMail);
         assertEquals(new Long(1), usersWithSameEmail);
     }
 

@@ -7,4 +7,5 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 
     boolean existsByNameIgnoreCase(String name);
 
+    Long countAllByNameIgnoreCase(String name);
 }
